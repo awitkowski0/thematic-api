@@ -25,10 +25,6 @@ allprojects {
 
     repositories {
         mavenCentral()
-        maven {
-            name 'KosmX\'s maven'
-            url 'https://maven.kosmx.dev/'
-        }
         exclusiveContent {
             forRepository {
                 maven {
@@ -53,6 +49,20 @@ allprojects {
 
     java {
         withSourcesJar()
+        withJavadocJar()
+    }
+
+    publishing {
+        publications {
+            maven(MavenPublication) {
+                from components.java
+            }
+        }
+    }
+
+    wrapper {
+        gradleVersion = "8.5"
+        distributionType = Wrapper.DistributionType.ALL
     }
 }
 
