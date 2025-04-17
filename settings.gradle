@@ -7,7 +7,7 @@ pluginManagement {
     }
 }
 
-rootProject.name = "playerAnimator"
+rootProject.name = "themAnimator"
 
 include 'coreLib'
 

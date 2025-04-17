@@ -1,17 +1,18 @@
 package dev.kosmx.animatorTestmod;
 
-import dev.kosmx.playerAnim.api.firstPerson.FirstPersonConfiguration;
-import dev.kosmx.playerAnim.api.firstPerson.FirstPersonMode;
-import dev.kosmx.playerAnim.api.layered.IAnimation;
-import dev.kosmx.playerAnim.api.layered.KeyframeAnimationPlayer;
-import dev.kosmx.playerAnim.api.layered.ModifierLayer;
-import dev.kosmx.playerAnim.api.layered.modifier.AbstractFadeModifier;
-import dev.kosmx.playerAnim.api.layered.modifier.MirrorModifier;
-import dev.kosmx.playerAnim.api.layered.modifier.SpeedModifier;
-import dev.kosmx.playerAnim.core.util.Ease;
-import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationAccess;
-import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationRegistry;
-import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationFactory;
+import com.funalex.themAnim.api.firstPerson.FirstPersonConfiguration;
+import com.funalex.themAnim.api.firstPerson.FirstPersonMode;
+import com.funalex.themAnim.api.layered.AnimationStack;
+import com.funalex.themAnim.api.layered.IAnimation;
+import com.funalex.themAnim.api.layered.KeyframeAnimationPlayer;
+import com.funalex.themAnim.api.layered.ModifierLayer;
+import com.funalex.themAnim.api.layered.modifier.AbstractFadeModifier;
+import com.funalex.themAnim.api.layered.modifier.MirrorModifier;
+import com.funalex.themAnim.api.layered.modifier.SpeedModifier;
+import com.funalex.themAnim.core.util.Ease;
+import com.funalex.themAnim.minecraftApi.PlayerAnimationAccess;
+import com.funalex.themAnim.minecraftApi.PlayerAnimationRegistry;
+import com.funalex.themAnim.minecraftApi.PlayerAnimationFactory;
 import net.fabricmc.api.ClientModInitializer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -64,10 +65,8 @@ public class PlayerAnimTestmod implements ClientModInitializer {
     }
 
     public static void playTestAnimation() {
-        //Use this for setting an animation without fade
-        //PlayerAnimTestmod.testAnimation.setAnimation(new KeyframeAnimationPlayer(AnimationRegistry.animations.get("two_handed_vertical_right_right")));
-
         ModifierLayer<IAnimation> testAnimation;
+
         if (new Random().nextBoolean()) {
             testAnimation = (ModifierLayer<IAnimation>) PlayerAnimationAccess.getPlayerAssociatedData(Minecraft.getInstance().player).get(new ResourceLocation("testmod", "animation"));
         } else {
@@ -81,9 +80,7 @@ public class PlayerAnimTestmod implements ClientModInitializer {
             //Fade from current animation to a new one.
             //Will not fade if there is no animation currently.
             testAnimation.replaceAnimationWithFade(AbstractFadeModifier.functionalFadeIn(20, (modelName, type, value) -> value),
-                    new KeyframeAnimationPlayer(PlayerAnimationRegistry.getAnimation(new ResourceLocation("testmod", "two_handed_slash_vertical_right")))
-                            .setFirstPersonMode(FirstPersonMode.THIRD_PERSON_MODEL)
-                            .setFirstPersonConfiguration(new FirstPersonConfiguration().setShowRightArm(true).setShowLeftItem(false))
+                    new KeyframeAnimationPlayer(PlayerAnimationRegistry.getAnimation(new ResourceLocation("testmod", "thunderclap")))
             );
         }
 

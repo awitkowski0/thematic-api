@@ -1,4 +1,8 @@
-# PlayerAnimator
+# Thematic Animator (PlayerAnimator)
+
+### This mod was created by KosmX and this fork is for Thematic-specific use-cases.
+
+You're free to use whatever you need from this library -- I'll maintain the MIT license from PlayerAnimator. I only renamed the packages so it'd be compatible with player animator.
 
 PlayerAnimator is a minecraft library to animate the **player** while trying to break as few mods as possible.    
 If you want to add new entities, use [Geckolib](https://geckolib.com/#mods)
@@ -104,7 +108,7 @@ animationStack.addAnimLayer(...);
 I advice using `ModifierLayer` and setting its animation. (this is null-tolerant)
 `ModifierLayer` is an `AnimationContainer` but with modifiers and fade-in/out.
 
-To play a keyframe animation from `emotecraft` or `geckolib` json, `dev.kosmx.playerAnim.core.data.gson.AnimationJson` will help you load it.  
+To play a keyframe animation from `emotecraft` or `geckolib` json, `gson.data.core.com.funalex.themAnim.AnimationJson` will help you load it.  
 `new KeyframeAnimationPlayer(animation)` will play it for you.
 
 To modify/tweak animations, look into `dev.kosmx.playerAnim.api.layered` package, you might implement your own `IAnimation` or extend/modify an existing class.  
@@ -151,7 +155,7 @@ In Emotecraft repo, there are some [tools](https://github.com/KosmX/emotes/tree/
 ***
 
 To load an animation, put the file(s) into `assets/modid/player_animation/`  
-Then you can get the animation with `dev.kosmx.playerAnim.minecraftApi.PlayerAnimationRegistry#getAnimation()`
+Then you can get the animation with `minecraftApi.com.funalex.themAnim.PlayerAnimationRegistry#getAnimation()`
 
 ## Notes
 GeckoLib is not guaranteed to work, but you can try! (It will work most of the time)  
