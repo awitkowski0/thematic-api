@@ -72,8 +72,9 @@ allprojects {
 
     publishing {
         publications {
-            maven(MavenPublication) {
+            mavenJava(MavenPublication) {
                 from components.java
+                artifactId = 'coreLib' // Make sure this is consistent
             }
         }
     }

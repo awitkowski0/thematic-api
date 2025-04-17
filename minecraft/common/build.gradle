@@ -21,21 +21,9 @@ dependencies {
 
 publishing {
     publications {
-        mavenCommon(MavenPublication) {
-            artifactId = rootProject.archives_base_name
+        mavenJava(MavenPublication) {
             from components.java
-
-            /*
-            pom.withXml {
-
-                def depsNode = asNode().appendNode("dependencies")
-
-                def apiNode = depsNode.appendNode("dependency")
-                apiNode.appendNode("groupId", project.group)
-                apiNode.appendNode("artifactId", "animCore")
-                apiNode.appendNode("version", project.version)
-                apiNode.appendNode("scope", "compile")
-            }//*/
+            artifactId = 'coreLib' // Make sure this is consistent
         }
     }
 

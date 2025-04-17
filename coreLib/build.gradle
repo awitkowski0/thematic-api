@@ -36,22 +36,8 @@ java {
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            artifactId = 'anim-core'
-
             from components.java
-
-            pom{
-                name = "playerAnimatorCORE"
-                description = "Minecraft animation api"
-                url = 'https://github.com/KosmX/emotes'
-                developers {
-                    developer {
-                        id = 'kosmx'
-                        name = 'KosmX'
-                        email = 'kosmx.mc@gmail.com'
-                    }
-                }
-            }
+            artifactId = 'coreLib' // Make sure this is consistent
         }
     }
     repositories {
