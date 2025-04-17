@@ -2,12 +2,13 @@ plugins {
     id "architectury-plugin" version "3.4-SNAPSHOT"
     id "dev.architectury.loom" version "1.5.+" apply false
 
+    id 'java' // Add this line
+    id "maven-publish" // Use this instead of applying it later
     //Publishing
     id 'com.matthewprenger.cursegradle' version '1.4.0' apply false
     id "com.modrinth.minotaur" version "2.8.7" apply false
     id 'com.github.johnrengelman.shadow' version '8.1.1' apply false
 }
-apply plugin: "maven-publish"
 
 tasks.withType(JavaCompile).configureEach {
     it.options.encoding = "UTF-8"
