@@ -36,6 +36,9 @@ allprojects {
                 includeGroup "maven.modrinth"
             }
         }
+        maven {
+            url = 'https://maven.kosmx.dev/'
+        }
     }
 
     dependencies {
@@ -49,7 +52,6 @@ allprojects {
 
     java {
         withSourcesJar()
-        withJavadocJar()
     }
 
     publishing {

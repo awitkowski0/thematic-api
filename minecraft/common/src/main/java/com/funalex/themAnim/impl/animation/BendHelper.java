@@ -10,8 +10,6 @@ import org.jetbrains.annotations.Nullable;
 
 @ApiStatus.Internal
 public class BendHelper implements IBendHelper {
-
-
     @Override
     public void bend(ModelPart modelPart, float axis, float rotation){
         // Don't enable bend until rotation is bigger than epsilon. This should avoid unnecessary heavy calculations.

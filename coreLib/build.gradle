@@ -30,7 +30,6 @@ test {
 }
 
 java {
-    withJavadocJar()
     withSourcesJar()
 }
 
@@ -75,6 +74,10 @@ publishing {
             }
         } else {
             mavenLocal()
+
+            maven {
+                url = 'https://maven.kosmx.dev/'
+            }
         }
     }
 }
