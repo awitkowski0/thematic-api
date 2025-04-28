@@ -1,5 +1,17 @@
 # Thematic Animator (PlayerAnimator)
 
+1) Run `transformProductionFabric`
+
+2) Publish to maven local
+```
+mvn install:install-file \
+-Dfile=/Users/alexw/IdeaProjects/minecraftPlayerAnimatorSynced/minecraft/fabric/build/libs/thematic-animation-lib-fabric-1.0.6a+1.20.jar \
+-DgroupId=com.funalex \
+-DartifactId=themAnim \
+-Dversion=1.0.6a+1.20 \
+-Dpackaging=jar
+```
+
 ### This mod was created by KosmX and this fork is for Thematic-specific use-cases.
 
 You're free to use whatever you need from this library -- I'll maintain the MIT license from PlayerAnimator. I only renamed the packages so it'd be compatible with player animator.

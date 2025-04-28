@@ -34,12 +34,6 @@ java {
 }
 
 publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
-            artifactId = 'coreLib' // Make sure this is consistent
-        }
-    }
     repositories {
 
         if (project.keysExists) {
