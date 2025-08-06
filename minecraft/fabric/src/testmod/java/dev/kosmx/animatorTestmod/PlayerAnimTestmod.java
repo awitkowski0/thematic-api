@@ -13,6 +13,7 @@ import com.funalex.themAnim.core.util.Ease;
 import com.funalex.themAnim.minecraftApi.PlayerAnimationAccess;
 import com.funalex.themAnim.minecraftApi.PlayerAnimationRegistry;
 import com.funalex.themAnim.minecraftApi.PlayerAnimationFactory;
+import java.security.SecureRandom;
 import net.fabricmc.api.ClientModInitializer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -67,13 +68,13 @@ public class PlayerAnimTestmod implements ClientModInitializer {
     public static void playTestAnimation() {
         ModifierLayer<IAnimation> testAnimation;
 
-        if (new Random().nextBoolean()) {
+        if (new SecureRandom().nextBoolean()) {
             testAnimation = (ModifierLayer<IAnimation>) PlayerAnimationAccess.getPlayerAssociatedData(Minecraft.getInstance().player).get(new ResourceLocation("testmod", "animation"));
         } else {
             testAnimation = (ModifierLayer<IAnimation>) PlayerAnimationAccess.getPlayerAssociatedData(Minecraft.getInstance().player).get(new ResourceLocation("testmod", "test"));
         }
 
-        if (testAnimation.getAnimation() != null && new Random().nextBoolean()) {
+        if (testAnimation.getAnimation() != null && new SecureRandom().nextBoolean()) {
             //It will fade out from the current animation, null as newAnimation means no animation.
             testAnimation.replaceAnimationWithFade(AbstractFadeModifier.standardFadeIn(20, Ease.LINEAR), null);
         } else {
