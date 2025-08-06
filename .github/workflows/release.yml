@@ -1,0 +1,133 @@
+name: Create Release
+
+on:
+  push:
+    tags:
+      - 'v*'  # Trigger on version tags like v1.0.7, v2.0.0, etc.
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write  # Required for creating releases
+      
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Fetch all history for proper versioning
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: gradle
+
+    - name: Make gradlew executable
+      run: chmod +x ./gradlew
+
+    - name: Build project
+      run: ./gradlew build
+
+    - name: Run tests
+      run: ./gradlew test
+
+    - name: Get version from tag
+      id: version
+      run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
+    - name: Generate changelog
+      id: changelog
+      run: |
+        # Get commits since last tag
+        LAST_TAG=$(git tag --sort=-version:refname | head -n 2 | tail -n 1)
+        if [ -z "$LAST_TAG" ]; then
+          CHANGELOG=$(git log --pretty=format:"- %s (%an)" --no-merges)
+        else
+          CHANGELOG=$(git log ${LAST_TAG}..HEAD --pretty=format:"- %s (%an)" --no-merges)
+        fi
+        
+        # Create multiline output
+        EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
+        echo "CHANGELOG<<$EOF" >> $GITHUB_OUTPUT
+        echo "$CHANGELOG" >> $GITHUB_OUTPUT
+        echo "$EOF" >> $GITHUB_OUTPUT
+
+    - name: Create Release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ steps.version.outputs.VERSION }}
+        release_name: Release ${{ steps.version.outputs.VERSION }} - JitPack Maven Repository
+        body: |
+          ## Changes in ${{ steps.version.outputs.VERSION }}
+
+          ${{ steps.changelog.outputs.CHANGELOG }}
+
+          ## Maven Repository via JitPack
+
+          ### Usage
+          Add this to your `build.gradle`:
+
+          ```gradle
+          repositories {
+              maven { url 'https://jitpack.io' }
+          }
+
+          dependencies {
+              implementation 'com.github.awitkowski0:minecraftPlayerAnimatorSynced:${{ steps.version.outputs.VERSION }}'
+          }
+          ```
+
+          ### JitPack Benefits
+          - Zero-configuration publishing
+          - Automatic builds from GitHub releases  
+          - No authentication required for consumers
+          - Perfect for open-source Minecraft mod distribution
+
+          ### Artifacts
+          This release automatically triggers JitPack to build and serve the Maven artifacts.
+          You can check the build status at: https://jitpack.io/#awitkowski0/minecraftPlayerAnimatorSynced/${{ steps.version.outputs.VERSION }}
+
+          ---
+          🤖 Generated with [Claude Code](https://claude.ai/code)
+        draft: false
+        prerelease: false
+
+    - name: Upload Core Library JAR
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./coreLib/build/libs/coreLib-${{ steps.version.outputs.VERSION }}.jar
+        asset_name: coreLib-${{ steps.version.outputs.VERSION }}.jar
+        asset_content_type: application/java-archive
+
+    - name: Upload Fabric JAR
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./minecraft/fabric/build/libs/thematic-animation-lib-fabric-${{ steps.version.outputs.VERSION }}.jar
+        asset_name: thematic-animation-lib-fabric-${{ steps.version.outputs.VERSION }}.jar
+        asset_content_type: application/java-archive
+
+    - name: Upload Forge JAR
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./minecraft/forge/build/libs/thematic-animation-lib-forge-${{ steps.version.outputs.VERSION }}.jar
+        asset_name: thematic-animation-lib-forge-${{ steps.version.outputs.VERSION }}.jar
+        asset_content_type: application/java-archive
+
+    - name: Notify JitPack
+      run: |
+        # Ping JitPack to start building this version
+        curl -s "https://jitpack.io/api/builds/awitkowski0/minecraftPlayerAnimatorSynced/${{ steps.version.outputs.VERSION }}" || echo "JitPack notification sent"
