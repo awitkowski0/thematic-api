@@ -111,7 +111,18 @@ publishing {
                     }
                 }
             } else {
-                mavenLocal()
+                maven {
+                    name = "GitHub_Packages"
+                    url = "https://maven.pkg.github.com/awitkowski0/minecraftPlayerAnimatorSynced"
+                    credentials {
+                        username = findProperty("gpr.user") ?: System.getenv("USERNAME")
+                        password = findProperty("gpr.key") ?: System.getenv("TOKEN")
+                    }
+                }
+                maven {
+                    name = "Maven_Central"
+                    url = "https://oss.sonatype.org/content/repositories/snapshots/"
+                }
             }
         }
     }

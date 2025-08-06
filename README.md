@@ -5,10 +5,10 @@
 2) Publish to maven local
 ```
 mvn install:install-file \
--Dfile=/Users/alexw/IdeaProjects/minecraftPlayerAnimatorSynced/minecraft/fabric/build/libs/thematic-animation-lib-fabric-1.0.6a+1.20.jar \
+-Dfile=/Users/alexw/IdeaProjects/minecraftPlayerAnimatorSynced/minecraft/fabric/build/libs/thematic-animation-lib-fabric-1.0.7+1.20.jar \
 -DgroupId=com.funalex \
 -DartifactId=themAnim \
--Dversion=1.0.6a+1.20 \
+-Dversion=1.0.7+1.20 \
 -Dpackaging=jar
 ```
 

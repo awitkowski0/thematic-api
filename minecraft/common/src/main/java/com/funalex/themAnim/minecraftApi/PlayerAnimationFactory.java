@@ -48,12 +48,6 @@ public interface PlayerAnimationFactory {
 
         @ApiStatus.Internal
         public void prepareAnimations(AbstractClientPlayer player, AnimationStack playerStack, Map<ResourceLocation, IAnimation> animationMap) {
-            ClientboundAnimatePacket packet = new ClientboundAnimatePacket(player, 0);
-
-            if (Minecraft.getInstance().getConnection() != null) {
-                Minecraft.getInstance().getConnection().send(packet);
-            }
-
             for (Function<AbstractClientPlayer, DataHolder> factory: factories) {
                 DataHolder dataHolder = factory.apply(player);
                 if (dataHolder != null) {
