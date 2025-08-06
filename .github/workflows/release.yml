@@ -92,41 +92,50 @@ jobs:
           ### Artifacts
           This release automatically triggers JitPack to build and serve the Maven artifacts.
           You can check the build status at: https://jitpack.io/#awitkowski0/minecraftPlayerAnimatorSynced/${{ steps.version.outputs.VERSION }}
-
-          ---
-          🤖 Generated with [Claude Code](https://claude.ai/code)
         draft: false
         prerelease: false
 
-    - name: Upload Core Library JAR
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./coreLib/build/libs/coreLib-${{ steps.version.outputs.VERSION }}.jar
-        asset_name: coreLib-${{ steps.version.outputs.VERSION }}.jar
-        asset_content_type: application/java-archive
+    - name: Find and Upload Core Library JAR
+      run: |
+        CORE_JAR=$(find ./coreLib/build/libs/ -name "coreLib-*.jar" -not -name "*-sources.jar" | head -1)
+        if [ -f "$CORE_JAR" ]; then
+          echo "Found core JAR: $CORE_JAR"
+          curl -X POST \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Content-Type: application/java-archive" \
+            --data-binary @"$CORE_JAR" \
+            "${{ steps.create_release.outputs.upload_url }}?name=coreLib-${{ steps.version.outputs.VERSION }}.jar&label=Core%20Library"
+        else
+          echo "Core JAR not found"
+        fi
 
-    - name: Upload Fabric JAR
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./minecraft/fabric/build/libs/thematic-animation-lib-fabric-${{ steps.version.outputs.VERSION }}.jar
-        asset_name: thematic-animation-lib-fabric-${{ steps.version.outputs.VERSION }}.jar
-        asset_content_type: application/java-archive
+    - name: Find and Upload Fabric JAR
+      run: |
+        FABRIC_JAR=$(find ./minecraft/fabric/build/libs/ -name "thematic-animation-lib-fabric-*.jar" -not -name "*-sources.jar" -not -name "*-dev.jar" -not -name "*-shadow.jar" | head -1)
+        if [ -f "$FABRIC_JAR" ]; then
+          echo "Found Fabric JAR: $FABRIC_JAR"
+          curl -X POST \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Content-Type: application/java-archive" \
+            --data-binary @"$FABRIC_JAR" \
+            "${{ steps.create_release.outputs.upload_url }}?name=thematic-animation-lib-fabric-${{ steps.version.outputs.VERSION }}.jar&label=Fabric%20Mod"
+        else
+          echo "Fabric JAR not found"
+        fi
 
-    - name: Upload Forge JAR
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./minecraft/forge/build/libs/thematic-animation-lib-forge-${{ steps.version.outputs.VERSION }}.jar
-        asset_name: thematic-animation-lib-forge-${{ steps.version.outputs.VERSION }}.jar
-        asset_content_type: application/java-archive
+    - name: Find and Upload Forge JAR
+      run: |
+        FORGE_JAR=$(find ./minecraft/forge/build/libs/ -name "thematic-animation-lib-forge-*.jar" -not -name "*-sources.jar" -not -name "*-dev.jar" -not -name "*-shadow.jar" | head -1)
+        if [ -f "$FORGE_JAR" ]; then
+          echo "Found Forge JAR: $FORGE_JAR"
+          curl -X POST \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Content-Type: application/java-archive" \
+            --data-binary @"$FORGE_JAR" \
+            "${{ steps.create_release.outputs.upload_url }}?name=thematic-animation-lib-forge-${{ steps.version.outputs.VERSION }}.jar&label=Forge%20Mod"
+        else
+          echo "Forge JAR not found"
+        fi
 
     - name: Notify JitPack
       run: |
