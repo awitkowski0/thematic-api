@@ -34,7 +34,7 @@ dependencies {
     common(project(path: ":${project.module_name}:common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":${project.module_name}:common", configuration: "transformProductionForge")) { transitive = false }
 
-    common(shadowCommon(project(path: ":coreLib")) {transitive false}) {transitive false} //Why can I nest these?
+    // coreLib code is now included in common module
 
     //Testing libraries
     /*
@@ -76,10 +76,8 @@ sourcesJar {
     def commonSources = project(":${project.module_name}:common").sourcesJar
     dependsOn commonSources
     from commonSources.archiveFile.map { zipTree(it) }
-
-    def apiSources = project(":coreLib").sourcesJar
-    dependsOn apiSources
-    from apiSources.archiveFile.map { zipTree(it) }
+    
+    // coreLib sources are now included in common module
 }
 
 components.java {

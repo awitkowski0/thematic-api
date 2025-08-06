@@ -95,20 +95,6 @@ jobs:
         draft: false
         prerelease: false
 
-    - name: Find and Upload Core Library JAR
-      run: |
-        CORE_JAR=$(find ./coreLib/build/libs/ -name "coreLib-*.jar" -not -name "*-sources.jar" | head -1)
-        if [ -f "$CORE_JAR" ]; then
-          echo "Found core JAR: $CORE_JAR"
-          curl -X POST \
-            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Content-Type: application/java-archive" \
-            --data-binary @"$CORE_JAR" \
-            "${{ steps.create_release.outputs.upload_url }}?name=coreLib-${{ steps.version.outputs.VERSION }}.jar&label=Core%20Library"
-        else
-          echo "Core JAR not found"
-        fi
-
     - name: Find and Upload Fabric JAR
       run: |
         FABRIC_JAR=$(find ./minecraft/fabric/build/libs/ -name "thematic-animation-lib-fabric-*.jar" -not -name "*-sources.jar" -not -name "*-dev.jar" -not -name "*-shadow.jar" | head -1)

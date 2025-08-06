@@ -9,8 +9,6 @@ pluginManagement {
 
 rootProject.name = "themAnimator"
 
-include 'coreLib'
-
 include 'minecraft'
 
 include "minecraft:common"
