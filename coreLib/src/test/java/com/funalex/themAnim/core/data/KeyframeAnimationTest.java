@@ -1,6 +1,7 @@
 package com.funalex.themAnim.core.data;
 
 import com.funalex.themAnim.core.util.Ease;
+import java.security.SecureRandom;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -23,7 +24,7 @@ public class KeyframeAnimationTest {
 
 
         // random case
-        Random random = new Random();
+        Random random = new SecureRandom();
 
         for (int i = 0; i < 10000; i += random.nextInt(100)) {
             state.addKeyFrame(i, i, Ease.CONSTANT);

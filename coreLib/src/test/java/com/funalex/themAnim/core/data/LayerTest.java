@@ -4,6 +4,7 @@ import com.funalex.themAnim.api.layered.AnimationStack;
 import com.funalex.themAnim.api.layered.IAnimation;
 import com.funalex.themAnim.api.layered.ModifierLayer;
 import com.funalex.themAnim.core.util.Pair;
+import java.security.SecureRandom;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
@@ -15,7 +16,7 @@ public class LayerTest {
     @Test
     public void testLayers() throws NoSuchFieldException, IllegalAccessException {
         AnimationStack stack = new AnimationStack();
-        Random random = new Random();
+        Random random = new SecureRandom();
         for (int i = 0; i < 128; i++) {
             stack.addAnimLayer(random.nextInt()%10000, new ModifierLayer<>());
         }
