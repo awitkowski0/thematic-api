@@ -3,7 +3,7 @@ architectury {
 }
 
 loom {
-    accessWidenerPath = file("src/main/resources/themAnimator.accesswidener")
+    accessWidenerPath = file("src/main/resources/thematic-api.accesswidener")
 }
 
 dependencies {
@@ -24,7 +24,7 @@ dependencies {
 
     //modApi "dev.architectury:architectury:${rootProject.architectury_version}"
 
-    modCompileOnly "io.github.kosmx.bendy-lib:bendy-lib:${project.bendy_lib}"
+    // Removed bendy-lib dependency - not needed
     modCompileOnly "maven.modrinth:3dskinlayers:1.5.2-fabric-1.19"
 
     }
@@ -45,16 +45,10 @@ publishing {
         repositories {
 
             if (project.keysExists) {
-                maven {
-                    url = 'https://maven.kosmx.dev/'
-                    credentials {
-                        username = project.keys.kosmx_maven_user
-                        password = project.keys.kosmx_maven
-                    }
-                }
+                // Removed kosmx maven repository
                 maven {
                     name = "GitHubPackages"
-                    url = "https://maven.pkg.github.com/kosmx/minecraftPlayerAnimator"
+                    // Removed old GitHub repository reference
                     credentials {
                         username = System.getenv("GITHUB_ACTOR")
                         password = System.getenv("GITHUB_TOKEN")

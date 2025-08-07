@@ -7,7 +7,7 @@ pluginManagement {
     }
 }
 
-rootProject.name = "themAnimator"
+rootProject.name = "thematic-api"
 
 include 'minecraft'
 

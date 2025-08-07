@@ -97,28 +97,28 @@ jobs:
 
     - name: Find and Upload Fabric JAR
       run: |
-        FABRIC_JAR=$(find ./minecraft/fabric/build/libs/ -name "thematic-animation-lib-fabric-*.jar" -not -name "*-sources.jar" -not -name "*-dev.jar" -not -name "*-shadow.jar" | head -1)
+        FABRIC_JAR=$(find ./minecraft/fabric/build/libs/ -name "thematic-api-fabric-*.jar" -not -name "*-sources.jar" -not -name "*-dev.jar" -not -name "*-shadow.jar" | head -1)
         if [ -f "$FABRIC_JAR" ]; then
           echo "Found Fabric JAR: $FABRIC_JAR"
           curl -X POST \
             -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             -H "Content-Type: application/java-archive" \
             --data-binary @"$FABRIC_JAR" \
-            "${{ steps.create_release.outputs.upload_url }}?name=thematic-animation-lib-fabric-${{ steps.version.outputs.VERSION }}.jar&label=Fabric%20Mod"
+            "${{ steps.create_release.outputs.upload_url }}?name=thematic-api-fabric-${{ steps.version.outputs.VERSION }}.jar&label=Fabric%20Mod"
         else
           echo "Fabric JAR not found"
         fi
 
     - name: Find and Upload Forge JAR
       run: |
-        FORGE_JAR=$(find ./minecraft/forge/build/libs/ -name "thematic-animation-lib-forge-*.jar" -not -name "*-sources.jar" -not -name "*-dev.jar" -not -name "*-shadow.jar" | head -1)
+        FORGE_JAR=$(find ./minecraft/forge/build/libs/ -name "thematic-api-forge-*.jar" -not -name "*-sources.jar" -not -name "*-dev.jar" -not -name "*-shadow.jar" | head -1)
         if [ -f "$FORGE_JAR" ]; then
           echo "Found Forge JAR: $FORGE_JAR"
           curl -X POST \
             -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             -H "Content-Type: application/java-archive" \
             --data-binary @"$FORGE_JAR" \
-            "${{ steps.create_release.outputs.upload_url }}?name=thematic-animation-lib-forge-${{ steps.version.outputs.VERSION }}.jar&label=Forge%20Mod"
+            "${{ steps.create_release.outputs.upload_url }}?name=thematic-api-forge-${{ steps.version.outputs.VERSION }}.jar&label=Forge%20Mod"
         else
           echo "Forge JAR not found"
         fi
@@ -126,4 +126,4 @@ jobs:
     - name: Notify JitPack
       run: |
         # Ping JitPack to start building this version
-        curl -s "https://jitpack.io/api/builds/awitkowski0/minecraftPlayerAnimatorSynced/${{ steps.version.outputs.VERSION }}" || echo "JitPack notification sent"
+        curl -s "https://jitpack.io/api/builds/awitkowski0/thematic-api/${{ steps.version.outputs.VERSION }}" || echo "JitPack notification sent"

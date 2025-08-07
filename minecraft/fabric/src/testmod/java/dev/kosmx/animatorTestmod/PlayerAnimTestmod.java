@@ -1,18 +1,10 @@
 package dev.kosmx.animatorTestmod;
 
-import com.funalex.themAnim.api.firstPerson.FirstPersonConfiguration;
-import com.funalex.themAnim.api.firstPerson.FirstPersonMode;
-import com.funalex.themAnim.api.layered.AnimationStack;
-import com.funalex.themAnim.api.layered.IAnimation;
-import com.funalex.themAnim.api.layered.KeyframeAnimationPlayer;
-import com.funalex.themAnim.api.layered.ModifierLayer;
-import com.funalex.themAnim.api.layered.modifier.AbstractFadeModifier;
-import com.funalex.themAnim.api.layered.modifier.MirrorModifier;
-import com.funalex.themAnim.api.layered.modifier.SpeedModifier;
-import com.funalex.themAnim.core.util.Ease;
-import com.funalex.themAnim.minecraftApi.PlayerAnimationAccess;
-import com.funalex.themAnim.minecraftApi.PlayerAnimationRegistry;
-import com.funalex.themAnim.minecraftApi.PlayerAnimationFactory;
+import bond.thematic.api.core.util.Ease;
+import bond.thematic.api.layered.modifier.AbstractFadeModifier;
+import bond.thematic.api.minecraftApi.PlayerAnimationAccess;
+import bond.thematic.api.minecraftApi.PlayerAnimationFactory;
+import bond.thematic.api.minecraftApi.PlayerAnimationRegistry;
 import net.fabricmc.api.ClientModInitializer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -45,17 +37,17 @@ public class PlayerAnimTestmod implements ClientModInitializer {
         PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(new ResourceLocation("testmod", "animation"), 42, (player) -> {
             if (player instanceof LocalPlayer) {
                 //animationStack.addAnimLayer(42, testAnimation); //Add and save the animation container for later use.
-                ModifierLayer<IAnimation> testAnimation =  new ModifierLayer<>();
+                bond.thematic.api.layered.ModifierLayer<bond.thematic.api.layered.IAnimation> testAnimation =  new bond.thematic.api.layered.ModifierLayer<>();
 
-                testAnimation.addModifierBefore(new SpeedModifier(0.5f)); //This will be slow
-                testAnimation.addModifierBefore(new MirrorModifier(true)); //Mirror the animation
+                testAnimation.addModifierBefore(new bond.thematic.api.layered.modifier.SpeedModifier(0.5f)); //This will be slow
+                testAnimation.addModifierBefore(new bond.thematic.api.layered.modifier.MirrorModifier(true)); //Mirror the animation
                 return testAnimation;
             }
             return null;
         });
 
         PlayerAnimationAccess.REGISTER_ANIMATION_EVENT.register((player, animationStack) -> {
-            ModifierLayer<IAnimation> layer = new ModifierLayer<>();
+            bond.thematic.api.layered.ModifierLayer<bond.thematic.api.layered.IAnimation> layer = new bond.thematic.api.layered.ModifierLayer<>();
             animationStack.addAnimLayer(69, layer);
             PlayerAnimationAccess.getPlayerAssociatedData(player).set(new ResourceLocation("testmod", "test"), layer);
         });
@@ -65,12 +57,12 @@ public class PlayerAnimTestmod implements ClientModInitializer {
     }
 
     public static void playTestAnimation() {
-        ModifierLayer<IAnimation> testAnimation;
+        bond.thematic.api.layered.ModifierLayer<bond.thematic.api.layered.IAnimation> testAnimation;
 
         if (new Random().nextBoolean()) {
-            testAnimation = (ModifierLayer<IAnimation>) PlayerAnimationAccess.getPlayerAssociatedData(Minecraft.getInstance().player).get(new ResourceLocation("testmod", "animation"));
+            testAnimation = (bond.thematic.api.layered.ModifierLayer<bond.thematic.api.layered.IAnimation>) PlayerAnimationAccess.getPlayerAssociatedData(Minecraft.getInstance().player).get(new ResourceLocation("testmod", "animation"));
         } else {
-            testAnimation = (ModifierLayer<IAnimation>) PlayerAnimationAccess.getPlayerAssociatedData(Minecraft.getInstance().player).get(new ResourceLocation("testmod", "test"));
+            testAnimation = (bond.thematic.api.layered.ModifierLayer<bond.thematic.api.layered.IAnimation>) PlayerAnimationAccess.getPlayerAssociatedData(Minecraft.getInstance().player).get(new ResourceLocation("testmod", "test"));
         }
 
         if (testAnimation.getAnimation() != null && new Random().nextBoolean()) {
@@ -80,7 +72,7 @@ public class PlayerAnimTestmod implements ClientModInitializer {
             //Fade from current animation to a new one.
             //Will not fade if there is no animation currently.
             testAnimation.replaceAnimationWithFade(AbstractFadeModifier.functionalFadeIn(20, (modelName, type, value) -> value),
-                    new KeyframeAnimationPlayer(PlayerAnimationRegistry.getAnimation(new ResourceLocation("testmod", "thunderclap")))
+                                                   new bond.thematic.api.layered.KeyframeAnimationPlayer(PlayerAnimationRegistry.getAnimation(new ResourceLocation("testmod", "thunderclap")))
             );
         }
 

@@ -1,0 +1,23 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "bond.thematic.api.mixin",
+  "compatibilityLevel": "JAVA_16",
+  "plugin": "bond.thematic.api.impl.mixin.MixinConfig",
+  "client": [
+    "ArmorFeatureRendererMixin",
+    "BipedEntityModelMixin",
+    "FeatureRendererMixin",
+    "HeldItemMixin",
+    "LivingEntityRenderRedirect_bendOnly",
+    "ModelPartMixin",
+    "PlayerEntityMixin",
+    "PlayerModelMixin",
+    "PlayerRendererMixin"
+  ],
+  "mixins": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

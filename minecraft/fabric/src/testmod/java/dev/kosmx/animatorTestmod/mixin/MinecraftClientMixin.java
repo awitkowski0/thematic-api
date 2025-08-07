@@ -1,10 +1,7 @@
 package dev.kosmx.animatorTestmod.mixin;
 
-import com.funalex.themAnim.api.layered.AnimationStack;
-import com.funalex.themAnim.api.layered.KeyframeAnimationPlayer;
-import com.funalex.themAnim.minecraftApi.PlayerAnimationAccess;
-import com.funalex.themAnim.minecraftApi.PlayerAnimationRegistry;
-import dev.kosmx.animatorTestmod.PlayerAnimTestmod;
+import bond.thematic.api.minecraftApi.PlayerAnimationAccess;
+import bond.thematic.api.minecraftApi.PlayerAnimationRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import org.spongepowered.asm.mixin.Mixin;
@@ -19,10 +16,8 @@ public abstract class MinecraftClientMixin {
     private void ATTACK(CallbackInfoReturnable<Boolean> cir) {
         System.out.println("MinecraftClientMixin - startAttack");
 
-
-
-        AnimationStack animationStack = PlayerAnimationAccess.getPlayerAnimLayer(Minecraft.getInstance().player);
-        KeyframeAnimationPlayer animPlayer = new KeyframeAnimationPlayer(PlayerAnimationRegistry.getAnimation(new ResourceLocation("testmod", "thunderclap")));
+        bond.thematic.api.layered.AnimationStack animationStack = PlayerAnimationAccess.getPlayerAnimLayer(Minecraft.getInstance().player);
+        bond.thematic.api.layered.KeyframeAnimationPlayer animPlayer = new bond.thematic.api.layered.KeyframeAnimationPlayer(PlayerAnimationRegistry.getAnimation(new ResourceLocation("testmod", "thunderclap")));
         animationStack.addAnimLayer(0, animPlayer);
         //PlayerAnimTestmod.playTestAnimation();
         cir.setReturnValue(true);

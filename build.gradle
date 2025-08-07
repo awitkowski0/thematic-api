@@ -49,9 +49,6 @@ allprojects {
                 includeGroup "maven.modrinth"
             }
         }
-        maven {
-            url = 'https://maven.kosmx.dev/'
-        }
     }
 
     dependencies {
@@ -92,7 +89,7 @@ ext.changes = ENV.CHANGELOG ? ENV.CHANGELOG.replaceAll("\\\\n", "\n") : ""
 ext.ENV = System.getenv()
 boolean upload = ENV.UPLOAD_TO_PORTAL ? ENV.UPLOAD_TO_PORTAL == "true" : false
 
-ext.keysExists = ENV.KOSMX_MAVEN_USER != null || project.getGradle().getStartParameter().isDryRun()
+ext.keysExists = false
 
 if(keysExists) {
     project.ext.keys = new Properties()
@@ -101,14 +98,10 @@ if(keysExists) {
         //All of these are fake, don't waste your time with it. (Copied from API docs and random generated)
         project.ext.keys.modrinth_token = "gho_pJ9dGXVKpfzZp4PUHSxYEq9hjk0h288Gwj4S"
         project.ext.keys.curseforge_key = "00000000-0000-0000-0000-000000000000"
-        project.ext.keys.kosmx_maven = "V2h5IGRpZCB5b3UgZGVjb2RlIGl0PyAg"
-        project.ext.keys.kosmx_maven_user = "username"
     } else {
         println("Keys loaded, loading publish scripts")
         project.ext.keys.modrinth_token = ENV.MODRINTH_TOKEN
         project.ext.keys.curseforge_key = ENV.CURSEFORGE_TOKEN
-        project.ext.keys.kosmx_maven = ENV.KOSMX_MAVEN_TOKEN
-        project.ext.keys.kosmx_maven_user = ENV.KOSMX_MAVEN_USER
     }
 
     publish {

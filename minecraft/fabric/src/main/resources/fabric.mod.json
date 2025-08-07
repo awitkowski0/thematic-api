@@ -1,32 +1,30 @@
 {
   "schemaVersion": 1,
-  "id": "thematic-anim",
+  "id": "thematic-api",
   "version": "${version}",
-  "name": "Thematic Animator (Player Animator)",
-  "description": "A lightweight library to easily animate the player",
+  "name": "Thematic API",
+  "description": "A modern Minecraft player animation library",
   "authors": [
-    "KosmX  "
+    "awitkowski0"
   ],
   "contact": {
-    "homepage": "kosmx.dev",
-    "sources": "https://github.com/KosmX/fabricPlayerAnimation"
+    "homepage": "https://github.com/awitkowski0/thematic-api",
+    "sources": "https://github.com/awitkowski0/thematic-api"
   },
   "license": "MIT",
   "environment": "*",
   "entrypoints": {
     "client": [
-      "com.funalex.themAnim.fabric.client.FabricClientInitializer"
+      "bond.thematic.api.fabric.client.FabricClientInitializer"
     ]
   },
   "mixins": [
-    "themAnimator-common.mixins.json"
+    "thematic-api-common.mixins.json"
   ],
   "depends": {
     "fabric-resource-loader-v0": "*"
   },
-  "breaks": {
-    "bettercombat": "<1.6.0"
-  },
+  "breaks": {},
   "custom": {
     "modmenu": {
       "badges": ["library"]
