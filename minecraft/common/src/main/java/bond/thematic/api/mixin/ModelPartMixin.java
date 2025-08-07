@@ -1,11 +1,11 @@
 package bond.thematic.api.mixin;
 
-import bond.thematic.api.impl.IUpperPartHelper;
-import net.minecraft.client.model.geom.ModelPart;
+import bond.thematic.api.IUpperPartHelper;
+import net.minecraft.client.model.ModelPart;
 import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(ModelPart.class)
-public class ModelPartMixin implements IUpperPartHelper {
+public abstract class ModelPartMixin implements IUpperPartHelper {
     private boolean Emotecraft_upper = false;
 
     @Override

@@ -1,18 +1,12 @@
 package dev.kosmx.animatorTestmod;
 
-import bond.thematic.api.core.util.Ease;
-import bond.thematic.api.layered.modifier.AbstractFadeModifier;
 import bond.thematic.api.minecraftApi.PlayerAnimationAccess;
 import bond.thematic.api.minecraftApi.PlayerAnimationFactory;
-import bond.thematic.api.minecraftApi.PlayerAnimationRegistry;
 import net.fabricmc.api.ClientModInitializer;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Random;
 
 /**
  * Testmod for testing and demonstration purposes.
@@ -34,8 +28,8 @@ public class PlayerAnimTestmod implements ClientModInitializer {
         LOGGER.warn("Testmod is loading :D");
 
         //You might use the EVENT to register new animations, or you can use Mixin.
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(new ResourceLocation("testmod", "animation"), 42, (player) -> {
-            if (player instanceof LocalPlayer) {
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(new Identifier("testmod", "animation"), 42, (player) -> {
+            if (player instanceof ClientPlayerEntity) {
                 //animationStack.addAnimLayer(42, testAnimation); //Add and save the animation container for later use.
                 bond.thematic.api.layered.ModifierLayer<bond.thematic.api.layered.IAnimation> testAnimation =  new bond.thematic.api.layered.ModifierLayer<>();
 
@@ -49,32 +43,9 @@ public class PlayerAnimTestmod implements ClientModInitializer {
         PlayerAnimationAccess.REGISTER_ANIMATION_EVENT.register((player, animationStack) -> {
             bond.thematic.api.layered.ModifierLayer<bond.thematic.api.layered.IAnimation> layer = new bond.thematic.api.layered.ModifierLayer<>();
             animationStack.addAnimLayer(69, layer);
-            PlayerAnimationAccess.getPlayerAssociatedData(player).set(new ResourceLocation("testmod", "test"), layer);
+            PlayerAnimationAccess.getPlayerAssociatedData(player).set(new Identifier("testmod", "test"), layer);
         });
         //You can add modifiers to the ModifierLayer.
-
-
-    }
-
-    public static void playTestAnimation() {
-        bond.thematic.api.layered.ModifierLayer<bond.thematic.api.layered.IAnimation> testAnimation;
-
-        if (new Random().nextBoolean()) {
-            testAnimation = (bond.thematic.api.layered.ModifierLayer<bond.thematic.api.layered.IAnimation>) PlayerAnimationAccess.getPlayerAssociatedData(Minecraft.getInstance().player).get(new ResourceLocation("testmod", "animation"));
-        } else {
-            testAnimation = (bond.thematic.api.layered.ModifierLayer<bond.thematic.api.layered.IAnimation>) PlayerAnimationAccess.getPlayerAssociatedData(Minecraft.getInstance().player).get(new ResourceLocation("testmod", "test"));
-        }
-
-        if (testAnimation.getAnimation() != null && new Random().nextBoolean()) {
-            //It will fade out from the current animation, null as newAnimation means no animation.
-            testAnimation.replaceAnimationWithFade(AbstractFadeModifier.standardFadeIn(20, Ease.LINEAR), null);
-        } else {
-            //Fade from current animation to a new one.
-            //Will not fade if there is no animation currently.
-            testAnimation.replaceAnimationWithFade(AbstractFadeModifier.functionalFadeIn(20, (modelName, type, value) -> value),
-                                                   new bond.thematic.api.layered.KeyframeAnimationPlayer(PlayerAnimationRegistry.getAnimation(new ResourceLocation("testmod", "thunderclap")))
-            );
-        }
 
 
     }

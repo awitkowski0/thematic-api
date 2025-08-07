@@ -1,4 +1,4 @@
-package bond.thematic.api.impl;
+package bond.thematic.api;
 
 import org.jetbrains.annotations.ApiStatus;
 

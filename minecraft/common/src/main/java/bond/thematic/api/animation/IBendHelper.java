@@ -1,9 +1,9 @@
-package bond.thematic.api.impl.animation;
+package bond.thematic.api.animation;
 
 import bond.thematic.api.core.util.Pair;
-import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.core.Direction;
+import net.minecraft.client.model.ModelPart;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.util.math.Direction;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Quaternionf;
@@ -20,13 +20,13 @@ public interface IBendHelper {
 
     IBendHelper INSTANCE = new BendHelper();
     
-    static void rotateMatrixStack(PoseStack matrices, Pair<Float, Float> pair){
+    static void rotateMatrixStack(MatrixStack matrices, Pair<Float, Float> pair){
         float offset = 0.375f;
         matrices.translate(0, offset, 0);
         float bend = pair.getRight();
         float axisf = - pair.getLeft();
         Vector3f axis = new Vector3f((float) Math.cos(axisf), 0, (float) Math.sin(axisf));
-        matrices.mulPose(new Quaternionf().rotateAxis(bend, axis));
+        matrices.multiply(new Quaternionf().rotateAxis(bend, axis));
         matrices.translate(0, - offset, 0);
     }
 

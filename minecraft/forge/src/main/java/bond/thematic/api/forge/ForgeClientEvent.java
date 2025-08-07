@@ -1,7 +1,6 @@
 package bond.thematic.api.forge;
 
 import bond.thematic.api.minecraftApi.PlayerAnimationRegistry;
-import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterClientReloadListenersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -19,7 +18,7 @@ public class ForgeClientEvent {
 
     @SubscribeEvent
     public static void resourceLoadingListener(@NotNull RegisterClientReloadListenersEvent event) {
-        event.registerReloadListener((ResourceManagerReloadListener) manager -> PlayerAnimationRegistry.resourceLoaderCallback(manager, ForgeModInterface.LOGGER));
+        event.registerReloadListener((SynchronousResourceReloader) manager -> PlayerAnimationRegistry.resourceLoaderCallback(manager, ForgeModInterface.LOGGER));
     }
 
 }

@@ -4,9 +4,9 @@ import bond.thematic.api.core.data.KeyframeAnimation;
 import bond.thematic.api.core.data.gson.AnimationSerializing;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.resource.ResourceManager;
+import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -30,14 +30,14 @@ import java.util.*;
  *   </tr>
  * </table>
  * <br>
- * Use {@link PlayerAnimationRegistry#getAnimation(ResourceLocation)} to fetch an animation
+ * Use {@link PlayerAnimationRegistry#getAnimation(Identifier)} to fetch an animation
  * <br><br>
  * Extra animations can be added by ResourcePack(s) or other mods
  */
 @Environment(EnvType.CLIENT)
 public final class PlayerAnimationRegistry {
 
-    private static final HashMap<ResourceLocation, KeyframeAnimation> animations = new HashMap<>();
+    private static final HashMap<Identifier, KeyframeAnimation> animations = new HashMap<>();
 
     /**
      * Get an animation from the registry, using Identifier(MODID, animation_name) as key
@@ -45,7 +45,7 @@ public final class PlayerAnimationRegistry {
      * @return animation, <code>null</code> if no animation
      */
     @Nullable
-    public static KeyframeAnimation getAnimation(@NotNull ResourceLocation identifier) {
+    public static KeyframeAnimation getAnimation(@NotNull Identifier identifier) {
         return animations.get(identifier);
     }
 
@@ -55,14 +55,14 @@ public final class PlayerAnimationRegistry {
      * @return Optional animation
      */
     @NotNull
-    public static Optional<KeyframeAnimation> getAnimationOptional(@NotNull ResourceLocation identifier) {
+    public static Optional<KeyframeAnimation> getAnimationOptional(@NotNull Identifier identifier) {
         return Optional.ofNullable(getAnimation(identifier));
     }
 
     /**
      * @return an unmodifiable map of all the animations
      */
-    public static Map<ResourceLocation, KeyframeAnimation> getAnimations() {
+    public static Map<Identifier, KeyframeAnimation> getAnimations() {
         return Map.copyOf(animations);
     }
 
@@ -73,7 +73,7 @@ public final class PlayerAnimationRegistry {
      */
     public static Map<String, KeyframeAnimation> getModAnimations(String modid) {
         HashMap<String, KeyframeAnimation> map = new HashMap<>();
-        for (Map.Entry<ResourceLocation, KeyframeAnimation> entry: animations.entrySet()) {
+        for (Map.Entry<Identifier, KeyframeAnimation> entry: animations.entrySet()) {
             if (entry.getKey().getNamespace().equals(modid)) {
                 map.put(entry.getKey().getPath(), entry.getValue());
             }
@@ -93,8 +93,8 @@ public final class PlayerAnimationRegistry {
         int successfulAnimations = 0;
         int failedAnimations = 0;
 
-        for (var resource: manager.listResources("animations/armor", location -> location.getPath().endsWith(".json")).entrySet()) {
-            try (var input = resource.getValue().open()) {
+        for (var resource: manager.findResources("animations/armor", location -> location.getPath().endsWith(".json")).entrySet()) {
+            try (var input = resource.getValue().getInputStream()) {
                 // Deserialize the animation json. GeckoLib animation json can contain multiple animations.
                 List<KeyframeAnimation> loadedAnimations = AnimationSerializing.deserializeAnimation(input);
 
@@ -109,7 +109,7 @@ public final class PlayerAnimationRegistry {
                         }
 
                         String animationName = serializeTextToString(nameObj.toString()).toLowerCase(Locale.ROOT);
-                        ResourceLocation animationKey = new ResourceLocation(
+                        Identifier animationKey = new Identifier(
                                 resource.getKey().getNamespace(),
                                 animationName
                         );
@@ -148,7 +148,7 @@ public final class PlayerAnimationRegistry {
      */
     public static String serializeTextToString(String arg) {
         try {
-            var component = Component.Serializer.fromJson(arg);
+            var component = Text.Serializer.fromJson(arg);
             if (component != null) {
                 return component.getString();
             }

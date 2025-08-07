@@ -1,4 +1,4 @@
-package bond.thematic.api.impl;
+package bond.thematic.api;
 
 import bond.thematic.api.core.impl.AnimationProcessor;
 import bond.thematic.api.core.util.SetableSupplier;

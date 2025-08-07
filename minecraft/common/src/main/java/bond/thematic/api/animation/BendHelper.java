@@ -1,8 +1,8 @@
-package bond.thematic.api.impl.animation;
+package bond.thematic.api.animation;
 
 import bond.thematic.api.core.util.Pair;
-import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.core.Direction;
+import net.minecraft.client.model.ModelPart;
+import net.minecraft.util.math.Direction;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 

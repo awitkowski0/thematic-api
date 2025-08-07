@@ -1,21 +1,21 @@
 package bond.thematic.api.mixin;
 
-import bond.thematic.api.impl.IUpperPartHelper;
-import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.renderer.entity.RenderLayerParent;
-import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
-import net.minecraft.client.resources.model.ModelManager;
-import net.minecraft.world.entity.LivingEntity;
+import bond.thematic.api.IUpperPartHelper;
+import net.minecraft.client.render.entity.feature.ArmorFeatureRenderer;
+import net.minecraft.client.render.entity.feature.FeatureRendererContext;
+import net.minecraft.client.render.entity.model.BipedEntityModel;
+import net.minecraft.client.render.model.BakedModelManager;
+import net.minecraft.entity.LivingEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(HumanoidArmorLayer.class)
-public class ArmorFeatureRendererMixin<T extends LivingEntity, M extends HumanoidModel<T>, A extends HumanoidModel<T>> {
+@Mixin(ArmorFeatureRenderer.class)
+public class ArmorFeatureRendererMixin<T extends LivingEntity, M extends BipedEntityModel<T>, A extends BipedEntityModel<T>> {
 
     @Inject(method = "<init>", at = @At("RETURN"))
-    private void initInject(RenderLayerParent<T, M> context, A leggingsModel, A bodyModel, ModelManager modelManager, CallbackInfo ci){
+    private void initInject(FeatureRendererContext<T, M> context, A leggingsModel, A bodyModel, BakedModelManager modelManager, CallbackInfo ci){
         ((IUpperPartHelper)this).setUpperPart(false);
     }
 }

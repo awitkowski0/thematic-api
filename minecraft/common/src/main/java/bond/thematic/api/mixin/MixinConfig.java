@@ -1,6 +1,5 @@
-package bond.thematic.api.impl.mixin;
+package bond.thematic.api.mixin;
 
-import bond.thematic.api.impl.Helper;
 import org.jetbrains.annotations.ApiStatus;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;

@@ -1,9 +1,8 @@
-package bond.thematic.api.impl;
+package bond.thematic.api;
 
-import bond.thematic.api.IPlayer;
 import bond.thematic.api.layered.IAnimation;
-import bond.thematic.api.impl.animation.AnimationApplier;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Identifier;
+import bond.thematic.api.animation.AnimationApplier;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -34,7 +33,7 @@ public interface IAnimatedPlayer extends IPlayer {
      * @apiNote     This function does <strong>not</strong> register the animation, just store it.
      */
     @Nullable
-    IAnimation playerAnimator_getAnimation(@NotNull ResourceLocation id);
+    IAnimation playerAnimator_getAnimation(@NotNull Identifier id);
 
     /**
      * Set an animation associated with the player
@@ -44,5 +43,5 @@ public interface IAnimatedPlayer extends IPlayer {
      * @return          The previously stored animation.
      */
     @Nullable
-    IAnimation playerAnimator_setAnimation(@NotNull ResourceLocation id, @Nullable IAnimation animation);
+    IAnimation playerAnimator_setAnimation(@NotNull Identifier id, @Nullable IAnimation animation);
 }

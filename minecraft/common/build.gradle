@@ -45,7 +45,6 @@ publishing {
         repositories {
 
             if (project.keysExists) {
-                // Removed kosmx maven repository
                 maven {
                     name = "GitHubPackages"
                     // Removed old GitHub repository reference
@@ -55,11 +54,9 @@ publishing {
                     }
                 }
             } else {
-                // JitPack - automatically publishes from GitHub releases/tags
                 maven {
                     name = "JitPack"
                     url = "https://jitpack.io"
-                    // No credentials needed - uses public GitHub repository
                 }
             }
         }

@@ -4,9 +4,9 @@ import bond.thematic.api.minecraftApi.PlayerAnimationRegistry;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.PackType;
-import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.resource.ResourceManager;
+import net.minecraft.resource.ResourceType;
+import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -21,14 +21,14 @@ public class FabricClientInitializer implements ClientModInitializer {
 
         // Removed SkinLayers integration since bending support was removed
 
-        ResourceManagerHelper.get(PackType.CLIENT_RESOURCES).registerReloadListener(new SimpleSynchronousResourceReloadListener() {
+        ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new SimpleSynchronousResourceReloadListener() {
             @Override
-            public ResourceLocation getFabricId() {
-                return new ResourceLocation("thematic-api", "animation");
+            public Identifier getFabricId() {
+                return new Identifier("thematic-api", "animation");
             }
 
             @Override
-            public void onResourceManagerReload(@NotNull ResourceManager manager) {
+            public void reload(@NotNull ResourceManager manager) {
                 PlayerAnimationRegistry.resourceLoaderCallback(manager, LOGGER);
             }
         });

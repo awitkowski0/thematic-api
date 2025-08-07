@@ -4,11 +4,11 @@ import bond.thematic.api.IPlayer;
 import bond.thematic.api.layered.AnimationStack;
 import bond.thematic.api.layered.IAnimation;
 import bond.thematic.api.core.impl.event.Event;
-import bond.thematic.api.impl.IAnimatedPlayer;
+import bond.thematic.api.IAnimatedPlayer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.player.AbstractClientPlayer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.network.AbstractClientPlayerEntity;
+import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,7 +23,7 @@ public final class PlayerAnimationAccess {
      * @param player The ClientPlayer object
      * @return The players' animation stack
      */
-    public static AnimationStack getPlayerAnimLayer(AbstractClientPlayer player) throws IllegalArgumentException {
+    public static AnimationStack getPlayerAnimLayer(AbstractClientPlayerEntity player) throws IllegalArgumentException {
         if (player instanceof IPlayer) {
             return ((IPlayer) player).getAnimationStack();
         } else throw new IllegalArgumentException(player + " is not a player or library mixins failed");
@@ -37,7 +37,7 @@ public final class PlayerAnimationAccess {
      * @throws IllegalArgumentException if the given argument is not a player, or api mixins have failed (normally never)
      * @implNote data is stored in the player object (using mixins), using it is more efficient than any objectMap as objectMap solution does not know when to delete the data.
      */
-    public static PlayerAssociatedAnimationData getPlayerAssociatedData(@NotNull AbstractClientPlayer player) {
+    public static PlayerAssociatedAnimationData getPlayerAssociatedData(@NotNull AbstractClientPlayerEntity player) {
         if (player instanceof IAnimatedPlayer animatedPlayer) {
             return new PlayerAssociatedAnimationData(animatedPlayer);
         } else throw new IllegalArgumentException(player + " is not a player or library mixins failed");
@@ -63,7 +63,7 @@ public final class PlayerAnimationAccess {
          * @param player         Client player object, can be the main player or other player
          * @param animationStack the players AnimationStack, unique for every player
          */
-        void registerAnimation(@NotNull AbstractClientPlayer player, @NotNull AnimationStack animationStack);
+        void registerAnimation(@NotNull AbstractClientPlayerEntity player, @NotNull AnimationStack animationStack);
     }
 
     public static class PlayerAssociatedAnimationData {
@@ -80,7 +80,7 @@ public final class PlayerAnimationAccess {
          * @return      animation or <code>null</code> if not exists
          * @apiNote     This function does <strong>not</strong> register the animation, just store it.
          */
-        @Nullable public IAnimation get(@NotNull ResourceLocation id) {
+        @Nullable public IAnimation get(@NotNull Identifier id) {
             return player.playerAnimator_getAnimation(id);
         }
 
@@ -91,7 +91,7 @@ public final class PlayerAnimationAccess {
          * @param animation animation to store in the player, <code>null</code> to clear stored animation
          * @return          The previously stored animation.
          */
-        @Nullable public IAnimation set(@NotNull ResourceLocation id, @Nullable IAnimation animation) {
+        @Nullable public IAnimation set(@NotNull Identifier id, @Nullable IAnimation animation) {
             return player.playerAnimator_setAnimation(id, animation);
         }
     }
