@@ -11,7 +11,6 @@ import org.jetbrains.annotations.NotNull;
 
 @Mod.EventBusSubscriber(modid = "thematic_api", bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ForgeClientEvent {
-
     @SubscribeEvent
     public static void clientSetup(FMLClientSetupEvent event) {
         // Removed SkinLayers integration since bending support was removed

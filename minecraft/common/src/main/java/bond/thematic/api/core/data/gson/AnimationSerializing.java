@@ -11,15 +11,20 @@ import java.util.List;
  * Can load emotecraft and basic gecko-lib animations
  * always create emotecraft animation
  * <p>
- * Use {@link AnimationSerializing#deserializeAnimation(Reader)} to deserialize<br>
- * or {@link AnimationSerializing#serializeAnimation(KeyframeAnimation)} to serialize.
+ * Use {@link AnimationSerializing#deserializeAnimation(Reader)} to
+ * deserialize<br>
+ * or {@link AnimationSerializing#serializeAnimation(KeyframeAnimation)} to
+ * serialize.
+ * 
  * @deprecated use AnimationCodecs instead
  */
+@Deprecated
 public class AnimationSerializing {
 
     /**
      * Deserialize animations from Emotecraft or GeckoLib InputStreamReader
      * AnimatinCodecs#serialize()
+     * 
      * @param stream inputStreamReader
      * @return List of animations
      */
@@ -30,6 +35,7 @@ public class AnimationSerializing {
     /**
      * Deserialize animations from Emotecraft or GeckoLib InputStream
      * use AnimatinCodecs#serialize()
+     * 
      * @param stream inputStream
      * @return List of animations
      */
@@ -39,10 +45,11 @@ public class AnimationSerializing {
         }
     }
 
-    //Emotecraft binary is an emotecraft-specific thing.
+    // Emotecraft binary is an emotecraft-specific thing.
 
     /**
      * Serialize animation into Emotecraft JSON format
+     * 
      * @param animation animation
      * @return string
      */
@@ -52,6 +59,7 @@ public class AnimationSerializing {
 
     /**
      * Write the animation to output stream
+     * 
      * @param animation animation
      * @param writer    writer
      * @return writer
