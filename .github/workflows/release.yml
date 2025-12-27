@@ -2,9 +2,6 @@ name: Create Release
 
 on:
   push:
-    tags:
-      - 'v*'  # Trigger on version tags like v1.0.7, v2.0.0, etc.
-
 jobs:
   release:
     runs-on: ubuntu-latest
