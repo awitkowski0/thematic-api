@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "thematic-api",
+  "id": "thematic_api",
   "version": "${version}",
   "name": "Thematic API",
   "description": "A modern Minecraft player animation library",
