@@ -3,7 +3,6 @@ package bond.thematic.api.core.data;
 import bond.thematic.api.IPlayable;
 import bond.thematic.api.layered.IActualAnimation;
 import bond.thematic.api.layered.KeyframeAnimationPlayer;
-import bond.thematic.api.core.data.opennbs.NBS;
 import bond.thematic.api.core.util.Ease;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
@@ -802,9 +801,6 @@ public final class KeyframeAnimation implements IPlayable {
         public String author = null;
 
         @Nullable
-        public NBS song = null;
-
-        @Nullable
         public ByteBuffer iconData;
 
         public HashMap<String, Object> extraData = new HashMap<>();
@@ -890,7 +886,6 @@ public final class KeyframeAnimation implements IPlayable {
             this.author = extraData.containsKey("author") && extraData.get("author") instanceof String ? (String) extraData.get("author") : null;
             this.emoteEmoteFormat = emoteFormat;
             this.iconData = extraData.containsKey("iconData") && extraData.get("iconData") instanceof ByteBuffer ? (ByteBuffer) extraData.get("iconData") : null;
-            this.song = extraData.containsKey("song") && extraData.get("song") instanceof NBS ? (NBS) extraData.get("song") : null;
         }
 
         /**
@@ -1061,7 +1056,6 @@ public final class KeyframeAnimation implements IPlayable {
             if (description != null) extraData.put("description", description);
             if (author != null) extraData.put("author", author);
             if (iconData != null) extraData.put("iconData", iconData);
-            if (song != null) extraData.put("song", song);
 
             // Create a filtered body parts map with no duplicates (only native names)
             HashMap<String, StateCollection> filteredBodyParts = new HashMap<>();
