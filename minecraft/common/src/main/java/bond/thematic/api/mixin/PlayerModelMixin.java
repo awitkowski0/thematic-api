@@ -101,20 +101,18 @@ public class PlayerModelMixin<T extends LivingEntity> extends BipedEntityModel<T
 
     @Inject(method = "setAngles(Lnet/minecraft/entity/LivingEntity;FFFFF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/ModelPart;copyTransform(Lnet/minecraft/client/model/ModelPart;)V", ordinal = 0))
     private void setEmote(T livingEntity, float f, float g, float h, float i, float j, CallbackInfo ci){
-        if(!firstPersonNext && livingEntity instanceof AbstractClientPlayerEntity && ((IAnimatedPlayer)livingEntity).playerAnimator_getAnimation().isActive()){
+        if(!firstPersonNext && livingEntity instanceof AbstractClientPlayerEntity abstractClientPlayerEntity && ((IAnimatedPlayer)livingEntity).playerAnimator_getAnimation().isActive()){
             AnimationApplier emote = ((IAnimatedPlayer) livingEntity).playerAnimator_getAnimation();
             emoteSupplier.set(emote);
 
-            emote.updatePart("head", this.head);
+            emote.updatePart("head", this.head, abstractClientPlayerEntity);
             this.hat.copyTransform(this.head);
 
-            emote.updatePart("leftArm", this.leftArm);
-            emote.updatePart("rightArm", this.rightArm);
-            emote.updatePart("leftLeg", this.leftLeg);
-            emote.updatePart("rightLeg", this.rightLeg);
-            emote.updatePart("torso", this.body);
-
-
+            emote.updatePart("leftArm", this.leftArm, abstractClientPlayerEntity);
+            emote.updatePart("rightArm", this.rightArm, abstractClientPlayerEntity);
+            emote.updatePart("leftLeg", this.leftLeg, abstractClientPlayerEntity);
+            emote.updatePart("rightLeg", this.rightLeg, abstractClientPlayerEntity);
+            emote.updatePart("torso", this.body, abstractClientPlayerEntity);
         }
         else {
             firstPersonNext = false;

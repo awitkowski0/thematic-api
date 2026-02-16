@@ -8,6 +8,7 @@ import bond.thematic.api.core.impl.AnimationProcessor;
 import bond.thematic.api.core.util.MathHelper;
 import bond.thematic.api.core.util.Pair;
 import bond.thematic.api.core.util.Vec3f;
+import net.minecraft.client.network.AbstractClientPlayerEntity;
 import org.jetbrains.annotations.ApiStatus;
 
 @ApiStatus.Internal
@@ -16,24 +17,66 @@ public class AnimationApplier extends AnimationProcessor {
         super(animation);
     }
 
-    public void updatePart(String partName, ModelPart part) {
-        Vec3f pos = this.get3DTransform(partName, TransformType.POSITION, new Vec3f(part.pivotX, part.pivotY, part.pivotZ));
+    public void updatePart(String partName, ModelPart part, AbstractClientPlayerEntity clientPlayerEntity) {
+        Vec3f standingPivot = getStandingPivot(partName);
+        Vec3f pos = this.get3DTransform(partName, TransformType.POSITION, standingPivot);
         part.pivotX = pos.getX();
         part.pivotY = pos.getY();
         part.pivotZ = pos.getZ();
-        Vec3f rot = this.get3DTransform(partName, TransformType.ROTATION, new Vec3f( // clamp guards
-                MathHelper.clampToRadian(part.pitch),
-                MathHelper.clampToRadian(part.yaw),
-                MathHelper.clampToRadian(part.roll)));
-        part.setAngles(rot.getX(), rot.getY(), rot.getZ());
-        if (!partName.equals("head")) {
+
+        if (clientPlayerEntity.isSneaky() && clientPlayerEntity.isOnGround()) {
             if (partName.equals("torso")) {
-                Pair<Float, Float> torsoBend = getBend(partName);
-                Pair<Float, Float> bodyBend = getBend("body");
-                IBendHelper.INSTANCE.bend(part, new Pair<>(torsoBend.getLeft() + bodyBend.getLeft(), torsoBend.getRight() + bodyBend.getRight()));
-            } else {
-                IBendHelper.INSTANCE.bend(part, getBend(partName));
+                part.pivotY += 3.2f;
+            } else if (partName.equals("head")) {
+                part.pivotY += 4.2f;
+            } else if (partName.equals("leftArm") || partName.equals("rightArm")) {
+                part.pivotY += 3.2f;
+            } else if (partName.equals("leftLeg") || partName.equals("rightLeg")) {
+                part.pivotY += 0.2f;
+                part.pivotZ += 4.0f;
             }
+        }
+        Vec3f rot = this.get3DTransform(partName, TransformType.ROTATION, Vec3f.ZERO);
+
+        if (partName.equals("torso")) {
+            Vec3f bodyPos = this.get3DTransform("body", TransformType.POSITION, Vec3f.ZERO);
+            Vec3f bodyRot = this.get3DTransform("body", TransformType.ROTATION, Vec3f.ZERO);
+
+            part.pivotX += bodyPos.getX();
+            part.pivotY += bodyPos.getY();
+            part.pivotZ += bodyPos.getZ();
+
+            rot = new Vec3f(
+                    rot.getX() + bodyRot.getX(),
+                    rot.getY() + bodyRot.getY(),
+                    rot.getZ() + bodyRot.getZ()
+            );
+        }
+        part.pitch += MathHelper.clampToRadian(rot.getX());
+        part.yaw += MathHelper.clampToRadian(rot.getY());
+        part.roll += MathHelper.clampToRadian(rot.getZ());
+
+        if (partName.equals("torso")) {
+            Pair<Float, Float> torsoBend = getBend(partName);
+            Pair<Float, Float> bodyBend = getBend("body");
+            IBendHelper.INSTANCE.bend(part, new Pair<>(torsoBend.getLeft() + bodyBend.getLeft(), torsoBend.getRight() + bodyBend.getRight()));
+        } else {
+            IBendHelper.INSTANCE.bend(part, getBend(partName));
+        }
+    }
+
+    private Vec3f getStandingPivot(String partName) {
+        switch (partName) {
+            case "rightArm":
+                return new Vec3f(-5.0f, 2.0f, 0.0f);
+            case "leftArm":
+                return new Vec3f(5.0f, 2.0f, 0.0f);
+            case "rightLeg":
+                return new Vec3f(-1.9f, 12.0f, 0.1f);
+            case "leftLeg":
+                return new Vec3f(1.9f, 12.0f, 0.1f);
+            default:
+                return Vec3f.ZERO;
         }
     }
 
