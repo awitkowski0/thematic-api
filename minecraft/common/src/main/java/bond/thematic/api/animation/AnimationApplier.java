@@ -18,8 +18,23 @@ public class AnimationApplier extends AnimationProcessor {
     }
 
     public void updatePart(String partName, ModelPart part, AbstractClientPlayerEntity clientPlayerEntity) {
-        Vec3f standingPivot = getStandingPivot(partName);
-        Vec3f pos = this.get3DTransform(partName, TransformType.POSITION, standingPivot);
+        String effectivePartName = partName;
+
+        if (partName.equals("armorLeftBoot") && !this.isPartAnimated("armorLeftBoot")) {
+            effectivePartName = "leftLeg";
+        }
+        if (partName.equals("armorRightBoot") && !this.isPartAnimated("armorRightBoot")) {
+            effectivePartName = "rightLeg";
+        }
+        if (partName.equals("armorLeftLeg") && !this.isPartAnimated("armorLeftLeg")) {
+            effectivePartName = "leftLeg";
+        }
+        if (partName.equals("armorRightLeg") && !this.isPartAnimated("armorRightLeg")) {
+            effectivePartName = "rightLeg";
+        }
+
+        Vec3f standingPivot = getStandingPivot(effectivePartName);
+        Vec3f pos = this.get3DTransform(effectivePartName, TransformType.POSITION, standingPivot);
         part.pivotX = pos.getX();
         part.pivotY = pos.getY();
         part.pivotZ = pos.getZ();

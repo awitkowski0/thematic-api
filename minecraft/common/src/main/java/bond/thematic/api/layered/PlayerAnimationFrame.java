@@ -83,6 +83,12 @@ public abstract class PlayerAnimationFrame implements IAnimation {
         }
     }
 
+    @Override
+    public boolean isPartAnimated(String partName) {
+        PlayerPart part = parts.get(partName);
+        return part != null && (part.bend != null || part.pos != null || part.rot != null || part.scale != null);
+    }
+
     public static class PlayerPart {
         public Vec3f pos;
         public Vec3f scale;

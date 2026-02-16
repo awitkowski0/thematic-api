@@ -136,6 +136,12 @@ public class KeyframeAnimationPlayer implements IActualAnimation<KeyframeAnimati
         this.tickDelta = tickDelta;
     }
 
+    @Override
+    public boolean isPartAnimated(String partName) {
+        BodyPart part = bodyParts.get(partName);
+        return part != null && part.part != null && part.part.isEnabled();
+    }
+
     /**
      * is the emote already in an infinite loop?
      *

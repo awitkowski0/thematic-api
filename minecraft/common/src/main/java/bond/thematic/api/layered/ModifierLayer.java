@@ -141,4 +141,12 @@ public class ModifierLayer<T extends IAnimation> implements IAnimation {
             modifiers.get(0).setupAnim(tickDelta);
         } else if (animation != null) animation.setupAnim(tickDelta);
     }
+
+    @Override
+    public boolean isPartAnimated(String partName) {
+        if (!modifiers.isEmpty()) {
+            return modifiers.get(0).isPartAnimated(partName);
+        } else if (animation != null) return animation.isPartAnimated(partName);
+        return false;
+    }
 }

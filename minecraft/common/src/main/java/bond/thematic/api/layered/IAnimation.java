@@ -40,4 +40,13 @@ public interface IAnimation {
      * @param tickDelta Time since the last tick. 0-1
      */
     void setupAnim(float tickDelta);
+
+    /**
+     * Is the part explicitly animated in this layer/animation?
+     * @param partName The part name
+     * @return true if animated
+     */
+    default boolean isPartAnimated(String partName) {
+        return false;
+    }
 }

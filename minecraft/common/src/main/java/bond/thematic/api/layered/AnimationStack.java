@@ -179,4 +179,20 @@ public class AnimationStack implements IAnimation {
             return false;
         }
     }
+
+    @Override
+    public boolean isPartAnimated(String partName) {
+        if (this.layers == null || this.layers.isEmpty()) {
+            return false;
+        }
+
+        for (Pair<Integer, IAnimation> layer : this.layers) {
+            if (layer != null && layer.getRight() != null && layer.getRight().isActive()) {
+                if (layer.getRight().isPartAnimated(partName)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }

@@ -44,4 +44,8 @@ public class AnimationProcessor {
         return new Pair<>(bendVec.getX(), bendVec.getY());
     }
 
+    public boolean isPartAnimated(String modelName) {
+        return animation.isPartAnimated(modelName);
+    }
+
 }

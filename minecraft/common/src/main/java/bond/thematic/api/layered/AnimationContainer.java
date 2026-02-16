@@ -53,4 +53,9 @@ public class AnimationContainer<T extends IAnimation> implements IAnimation {
     public void setupAnim(float tickDelta) {
         if (this.anim != null) this.anim.setupAnim(tickDelta);
     }
+
+    @Override
+    public boolean isPartAnimated(String partName) {
+        return anim != null && anim.isPartAnimated(partName);
+    }
 }
