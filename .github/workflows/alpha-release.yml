@@ -77,8 +77,8 @@ jobs:
           git commit -m "Bump version to ${{ steps.new_version.outputs.new_version }} for alpha release [skip ci]" || exit 0
           git push origin HEAD:${{ github.ref_name }}
 
-      - name: Build with Gradle
-        run: ./gradlew build --no-daemon
+      - name: Build and Publish with Gradle
+        run: ./gradlew build publish --no-daemon
         env:
           CLOUDSMITH_USER: ${{ secrets.CLOUDSMITH_USER }}
           CLOUDSMITH_TOKEN: ${{ secrets.CLOUDSMITH_TOKEN }}
