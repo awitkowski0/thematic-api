@@ -38,6 +38,14 @@ allprojects {
 
     repositories {
         mavenCentral()
+        maven {
+            name = "Cloudsmith"
+            url = "https://maven.cloudsmith.io/thematic/thematic-api/"
+            credentials {
+                username = System.getenv("CLOUDSMITH_USER")
+                password = System.getenv("CLOUDSMITH_TOKEN")
+            }
+        }
         exclusiveContent {
             forRepository {
                 maven {

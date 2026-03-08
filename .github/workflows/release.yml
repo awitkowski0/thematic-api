@@ -7,6 +7,7 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
+    environment: publish
     
     permissions:
       contents: write  # Required for creating releases
@@ -27,8 +28,11 @@ jobs:
     - name: Make gradlew executable
       run: chmod +x ./gradlew
 
-    - name: Build project
-      run: ./gradlew build
+    - name: Build and Publish project
+      run: ./gradlew build publish
+      env:
+        CLOUDSMITH_USER: ${{ secrets.CLOUDSMITH_USER }}
+        CLOUDSMITH_TOKEN: ${{ secrets.CLOUDSMITH_TOKEN }}
 
     - name: Run tests
       run: ./gradlew test
@@ -61,36 +65,31 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: ${{ steps.version.outputs.VERSION }}
-        release_name: Release ${{ steps.version.outputs.VERSION }} - JitPack Maven Repository
+        release_name: Release ${{ steps.version.outputs.VERSION }} - Cloudsmith Maven Repository
         body: |
           ## Changes in ${{ steps.version.outputs.VERSION }}
 
           ${{ steps.changelog.outputs.CHANGELOG }}
 
-          ## Maven Repository via JitPack
+          ## Cloudsmith Maven Repository
 
           ### Usage
           Add this to your `build.gradle`:
 
           ```gradle
           repositories {
-              maven { url 'https://jitpack.io' }
+              maven { 
+                  name = "Cloudsmith"
+                  url = "https://maven.cloudsmith.io/thematic/thematic-api/"
+              }
           }
 
           dependencies {
-              implementation 'com.github.awitkowski0:minecraftPlayerAnimatorSynced:${{ steps.version.outputs.VERSION }}'
+              implementation 'bond.thematic:thematic_api-fabric:${{ steps.version.outputs.VERSION }}'
+              // or for forge:
+              // implementation 'bond.thematic:thematic_api-forge:${{ steps.version.outputs.VERSION }}'
           }
           ```
-
-          ### JitPack Benefits
-          - Zero-configuration publishing
-          - Automatic builds from GitHub releases  
-          - No authentication required for consumers
-          - Perfect for open-source Minecraft mod distribution
-
-          ### Artifacts
-          This release automatically triggers JitPack to build and serve the Maven artifacts.
-          You can check the build status at: https://jitpack.io/#awitkowski0/minecraftPlayerAnimatorSynced/${{ steps.version.outputs.VERSION }}
         draft: false
         prerelease: false
 
@@ -121,8 +120,3 @@ jobs:
         else
           echo "Forge JAR not found"
         fi
-
-    - name: Notify JitPack
-      run: |
-        # Ping JitPack to start building this version
-        curl -s "https://jitpack.io/api/builds/awitkowski0/thematic-api/${{ steps.version.outputs.VERSION }}" || echo "JitPack notification sent"

@@ -55,8 +55,12 @@ publishing {
                 }
             } else {
                 maven {
-                    name = "JitPack"
-                    url = "https://jitpack.io"
+                    name = "Cloudsmith"
+                    url = "https://maven.cloudsmith.io/thematic/thematic-api/"
+                    credentials {
+                        username = System.getenv("CLOUDSMITH_USER")
+                        password = System.getenv("CLOUDSMITH_TOKEN")
+                    }
                 }
             }
         }

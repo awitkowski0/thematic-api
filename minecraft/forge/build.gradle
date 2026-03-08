@@ -105,11 +105,13 @@ publishing {
                     }
                 }
             } else {
-                // JitPack - automatically publishes from GitHub releases/tags
                 maven {
-                    name = "JitPack"
-                    url = "https://jitpack.io"
-                    // No credentials needed - uses public GitHub repository
+                    name = "Cloudsmith"
+                    url = "https://maven.cloudsmith.io/thematic/thematic-api/"
+                    credentials {
+                        username = System.getenv("CLOUDSMITH_USER")
+                        password = System.getenv("CLOUDSMITH_TOKEN")
+                    }
                 }
             }
         }
