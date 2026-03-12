@@ -2,13 +2,10 @@ package bond.thematic.api.core.impl;
 
 
 import bond.thematic.api.TransformType;
-import bond.thematic.api.firstPerson.FirstPersonConfiguration;
-import bond.thematic.api.firstPerson.FirstPersonMode;
 import bond.thematic.api.layered.IAnimation;
 import bond.thematic.api.core.util.Pair;
 import bond.thematic.api.core.util.Vec3f;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Tool to easily play animation to the player.
@@ -48,4 +45,7 @@ public class AnimationProcessor {
         return animation.isPartAnimated(modelName);
     }
 
+    public IAnimation.KeyframeType getKeyframeType() {
+        return animation.getKeyframeType();
+    }
 }

@@ -87,12 +87,16 @@ public class KeyframeAnimationPlayer implements IActualAnimation<KeyframeAnimati
     public void tick() {
         if (this.isRunning) {
             this.currentTick++;
-            if (data.isInfinite && this.currentTick > data.endTick) {
+            if (data.getPlayMode() == PlayMode.LOOP && this.currentTick > data.endTick) {
                 this.currentTick = data.returnToTick;
                 this.isLoopStarted = true;
             }
             if (currentTick >= data.stopTick) {
-                this.stop();
+                if (data.getPlayMode() == PlayMode.HOLD) {
+                    this.currentTick = data.stopTick;
+                } else if (data.getPlayMode() != PlayMode.LOOP) {
+                    this.stop();
+                }
             }
         }
     }
@@ -140,6 +144,16 @@ public class KeyframeAnimationPlayer implements IActualAnimation<KeyframeAnimati
     public boolean isPartAnimated(String partName) {
         BodyPart part = bodyParts.get(partName);
         return part != null && part.part != null && part.part.isEnabled();
+    }
+
+    @Override
+    public KeyframeType getKeyframeType() {
+        return this.data.getKeyframeType();
+    }
+
+    @Override
+    public PlayMode getPlayMode() {
+        return this.data.getPlayMode();
     }
 
     /**
@@ -340,7 +354,7 @@ public class KeyframeAnimationPlayer implements IActualAnimation<KeyframeAnimati
          * @param after  Keyframe after
          * @return value
          */
-        protected final float getValueFromKeyframes(KeyframeAnimation.KeyFrame before, KeyframeAnimation.KeyFrame after) {
+        protected float getValueFromKeyframes(KeyframeAnimation.KeyFrame before, KeyframeAnimation.KeyFrame after) {
             int tickBefore = before.tick;
             int tickAfter = after.tick;
             if (tickBefore >= tickAfter) {
@@ -363,7 +377,22 @@ public class KeyframeAnimationPlayer implements IActualAnimation<KeyframeAnimati
 
         @Override
         public float getValueAtCurrentTick(float currentValue) {
-            return MathHelper.clampToRadian(super.getValueAtCurrentTick(MathHelper.clampToRadian(currentValue)));
+            return super.getValueAtCurrentTick(currentValue);
+        }
+
+        @Override
+        protected float getValueFromKeyframes(KeyframeAnimation.KeyFrame before, KeyframeAnimation.KeyFrame after) {
+            int tickBefore = before.tick;
+            int tickAfter = after.tick;
+            if (tickBefore >= tickAfter) {
+                if (currentTick < tickBefore) tickBefore -= data.endTick - data.returnToTick + 1;
+                else tickAfter += data.endTick - data.returnToTick + 1;
+            }
+            if (tickBefore == tickAfter) return before.value;
+            float f = (currentTick + tickDelta - (float) tickBefore) / (tickAfter - tickBefore);
+            KeyframeAnimation.KeyFrame getEaseFrom = data.isEasingBefore ? after : before;
+            
+            return MathHelper.lerpAngle(getEaseFrom.ease.invoke(f, getEaseFrom.easingArg), before.value, after.value);
         }
     }
 }

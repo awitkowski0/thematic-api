@@ -44,6 +44,9 @@ public class PlayerAnimTestmod implements ClientModInitializer {
             bond.thematic.api.layered.ModifierLayer<bond.thematic.api.layered.IAnimation> layer = new bond.thematic.api.layered.ModifierLayer<>();
             animationStack.addAnimLayer(69, layer);
             PlayerAnimationAccess.getPlayerAssociatedData(player).set(new Identifier("testmod", "test"), layer);
+
+            // Add the flight controller at a high priority
+            animationStack.addAnimLayer(80, FlightController.createFlightAnimation(player));
         });
         //You can add modifiers to the ModifierLayer.
 

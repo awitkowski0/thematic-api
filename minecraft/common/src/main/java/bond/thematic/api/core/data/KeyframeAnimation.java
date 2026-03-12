@@ -2,6 +2,7 @@ package bond.thematic.api.core.data;
 
 import bond.thematic.api.IPlayable;
 import bond.thematic.api.layered.IActualAnimation;
+import bond.thematic.api.layered.IAnimation;
 import bond.thematic.api.layered.KeyframeAnimationPlayer;
 import bond.thematic.api.core.util.Ease;
 import lombok.Getter;
@@ -135,6 +136,26 @@ public final class KeyframeAnimation implements IPlayable {
         this.animationFormat = emoteFormat;
         assert emoteFormat != null;
         this.extraData.putAll(extraData);
+    }
+
+    public IAnimation.KeyframeType getKeyframeType() {
+        if (extraData.containsKey("type")) {
+            String type = extraData.get("type").toString();
+            if (type.equalsIgnoreCase("static")) {
+                return IAnimation.KeyframeType.STATIC;
+            }
+        }
+        return IAnimation.KeyframeType.ADDITIVE;
+    }
+
+    public IAnimation.PlayMode getPlayMode() {
+        if (extraData.containsKey("play_mode")) {
+            String mode = extraData.get("play_mode").toString();
+            if (mode.equalsIgnoreCase("loop")) return IAnimation.PlayMode.LOOP;
+            if (mode.equalsIgnoreCase("hold")) return IAnimation.PlayMode.HOLD;
+            if (mode.equalsIgnoreCase("once")) return IAnimation.PlayMode.ONCE;
+        }
+        return isInfinite ? IAnimation.PlayMode.LOOP : IAnimation.PlayMode.ONCE;
     }
 
     /**
@@ -1012,20 +1033,40 @@ public final class KeyframeAnimation implements IPlayable {
         }
 
         public StateCollection getOrCreatePart(String name) {
-            if (!bodyParts.containsKey(name)) {
-                StateCollection stateCollection = new StateCollection(this.validationThreshold);
-                bodyParts.put(name, stateCollection);
+            if (bodyParts.containsKey(name)) {
+                return bodyParts.get(name);
+            }
 
-                // If it's a native name, also register the biped equivalent (if it exists)
-                if (NATIVE_TO_BIPED_MAPPING.containsKey(name)) {
-                    bodyParts.put(NATIVE_TO_BIPED_MAPPING.get(name), stateCollection);
-                }
-                // If it's a biped name, also register the native equivalent (if it exists)
-                else if (BIPED_TO_NATIVE_MAPPING.containsKey(name)) {
-                    bodyParts.put(BIPED_TO_NATIVE_MAPPING.get(name), stateCollection);
+            // Check for aliases
+            if (BIPED_TO_NATIVE_MAPPING.containsKey(name)) {
+                String nativeName = BIPED_TO_NATIVE_MAPPING.get(name);
+                if (bodyParts.containsKey(nativeName)) {
+                    StateCollection existing = bodyParts.get(nativeName);
+                    bodyParts.put(name, existing);
+                    return existing;
                 }
             }
-            return bodyParts.get(name);
+            if (NATIVE_TO_BIPED_MAPPING.containsKey(name)) {
+                String bipedName = NATIVE_TO_BIPED_MAPPING.get(name);
+                if (bodyParts.containsKey(bipedName)) {
+                    StateCollection existing = bodyParts.get(bipedName);
+                    bodyParts.put(name, existing);
+                    return existing;
+                }
+            }
+
+            // If no existing part/alias, create a new one
+            StateCollection stateCollection = new StateCollection(this.validationThreshold);
+            bodyParts.put(name, stateCollection);
+            
+            // Register aliases for the new part too
+            if (BIPED_TO_NATIVE_MAPPING.containsKey(name)) {
+                bodyParts.put(BIPED_TO_NATIVE_MAPPING.get(name), stateCollection);
+            } else if (NATIVE_TO_BIPED_MAPPING.containsKey(name)) {
+                bodyParts.put(NATIVE_TO_BIPED_MAPPING.get(name), stateCollection);
+            }
+            
+            return stateCollection;
         }
 
         public AnimationBuilder fullyEnableParts() {

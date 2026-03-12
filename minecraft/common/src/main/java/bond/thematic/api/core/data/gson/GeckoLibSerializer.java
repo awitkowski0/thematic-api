@@ -77,6 +77,8 @@ public class GeckoLibSerializer {
                     if (loopString.equals("hold_on_last_frame")) {
                         builder.isLooped = true;
                         builder.returnTick = builder.endTick;
+                    } else if (loopString.equals("loop") || loopString.equals("true")) {
+                        builder.isLooped = true;
                     }
                 }
             }
@@ -86,19 +88,27 @@ public class GeckoLibSerializer {
     private static void keyframeSerializer(KeyframeAnimation.AnimationBuilder emoteData, JsonObject node) {
         for (Map.Entry<String, JsonElement> entry : node.entrySet()) {
             try {
+                String boneName = snake2Camel(entry.getKey());
                 readBone(
-                        emoteData.getOrCreatePart(snake2Camel(entry.getKey())),
+                        emoteData.getOrCreatePart(boneName),
                         entry.getValue().getAsJsonObject(),
-                        emoteData
+                        emoteData,
+                        boneName
                 );
             } catch (Exception e) {
             }
         }
     }
 
-    private static void readBone(KeyframeAnimation.StateCollection stateCollection, JsonObject node, KeyframeAnimation.AnimationBuilder emoteData) {
-        processTransformation(node, "rotation", stateCollection, emoteData, false);
-        processTransformation(node, "position", stateCollection, emoteData, true);
+    private static void readBone(KeyframeAnimation.StateCollection stateCollection, JsonObject node, KeyframeAnimation.AnimationBuilder emoteData, String boneName) {
+        if (boneName.equals("armorBody")) {
+            // Split GeckoLib root bone: Position moves the player globally, Rotation rotates the torso
+            processTransformation(node, "rotation", emoteData.torso, emoteData, false);
+            processTransformation(node, "position", emoteData.body, emoteData, true);
+        } else {
+            processTransformation(node, "rotation", stateCollection, emoteData, false);
+            processTransformation(node, "position", stateCollection, emoteData, true);
+        }
     }
 
     private static void processTransformation(JsonObject node, String transformType,
@@ -268,15 +278,20 @@ public class GeckoLibSerializer {
         for(int i = 0; i < 3; i++){
             float value = array.get(i).getAsFloat();
             if (isPos) {
+                // IMPORTANT: Only the global character translation (mapped to 'body' field) 
+                // is scaled to blocks (1/16). Limbs/Torso use pixel units.
                 if (a[0] == emoteData.body.x) {
                     value = value / 16f;
-                    if (i == 0) value = -value;
+                    if (i == 0) value = -value; // Flip X for block-space global translation
                 }
-                else if (i == 1) {
+                
+                // GeckoLib Y is up, Minecraft Y is down
+                if (i == 1) {
                     value = -value;
                 }
             } else {
-                if (a[0] == emoteData.body.pitch && i != 2) {
+                // Rotation: GeckoLib pitch/yaw generally need inversion to match MC ModelPart axes
+                if (i != 2) {
                     value = -value;
                 }
             }

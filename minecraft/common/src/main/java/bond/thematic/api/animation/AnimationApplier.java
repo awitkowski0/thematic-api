@@ -53,23 +53,15 @@ public class AnimationApplier extends AnimationProcessor {
         }
         Vec3f rot = this.get3DTransform(partName, TransformType.ROTATION, Vec3f.ZERO);
 
-        if (partName.equals("torso")) {
-            Vec3f bodyPos = this.get3DTransform("body", TransformType.POSITION, Vec3f.ZERO);
-            Vec3f bodyRot = this.get3DTransform("body", TransformType.ROTATION, Vec3f.ZERO);
-
-            part.pivotX += bodyPos.getX();
-            part.pivotY += bodyPos.getY();
-            part.pivotZ += bodyPos.getZ();
-
-            rot = new Vec3f(
-                    rot.getX() + bodyRot.getX(),
-                    rot.getY() + bodyRot.getY(),
-                    rot.getZ() + bodyRot.getZ()
-            );
+        if (this.getKeyframeType() == IAnimation.KeyframeType.STATIC) {
+            part.pitch = MathHelper.clampToRadian(rot.getX());
+            part.yaw = MathHelper.clampToRadian(rot.getY());
+            part.roll = MathHelper.clampToRadian(rot.getZ());
+        } else {
+            part.pitch += MathHelper.clampToRadian(rot.getX());
+            part.yaw += MathHelper.clampToRadian(rot.getY());
+            part.roll += MathHelper.clampToRadian(rot.getZ());
         }
-        part.pitch += MathHelper.clampToRadian(rot.getX());
-        part.yaw += MathHelper.clampToRadian(rot.getY());
-        part.roll += MathHelper.clampToRadian(rot.getZ());
 
         if (partName.equals("torso")) {
             Pair<Float, Float> torsoBend = getBend(partName);

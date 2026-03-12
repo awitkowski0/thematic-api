@@ -11,6 +11,34 @@ import org.jetbrains.annotations.NotNull;
  * An entry in {@link AnimationStack}, used to get the animated parts current transform
  */
 public interface IAnimation {
+    enum KeyframeType {
+        ADDITIVE,
+        STATIC
+    }
+
+    enum PlayMode {
+        ONCE,
+        LOOP,
+        HOLD
+    }
+
+    /**
+     * Get the type of the keyframe animation
+     * 
+     * @return keyframe type
+     */
+    default KeyframeType getKeyframeType() {
+        return KeyframeType.ADDITIVE;
+    }
+
+    /**
+     * Get the playback mode of the animation
+     * 
+     * @return playback mode
+     */
+    default PlayMode getPlayMode() {
+        return PlayMode.ONCE;
+    }
 
     /**
      * Animation tick, on lag free client 20 [tick/sec]

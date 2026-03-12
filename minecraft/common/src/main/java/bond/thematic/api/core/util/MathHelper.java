@@ -27,13 +27,25 @@ public class MathHelper {
      * @param f radians
      * @return radians
      */
-    public static float clampToRadian(float f){
+    public static float wrapRadians(float f){
         final double a = Math.PI*2;
         double b = ((f + Math.PI)%a);
         if(b < 0){
             b += a;
         }
         return (float) (b - Math.PI);
+    }
+
+    public static float clampToRadian(float f) {
+        return wrapRadians(f);
+    }
+
+    public static float lerpAngle(float delta, float start, float end) {
+        float repeat = (float) (Math.PI * 2);
+        float d = (end - start) % repeat;
+        if (d > Math.PI) d -= repeat;
+        if (d < -Math.PI) d += repeat;
+        return start + d * delta;
     }
 
 
