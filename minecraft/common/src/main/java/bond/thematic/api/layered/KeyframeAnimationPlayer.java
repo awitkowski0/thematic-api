@@ -391,8 +391,14 @@ public class KeyframeAnimationPlayer implements IActualAnimation<KeyframeAnimati
             if (tickBefore == tickAfter) return before.value;
             float f = (currentTick + tickDelta - (float) tickBefore) / (tickAfter - tickBefore);
             KeyframeAnimation.KeyFrame getEaseFrom = data.isEasingBefore ? after : before;
-            
-            return MathHelper.lerpAngle(getEaseFrom.ease.invoke(f, getEaseFrom.easingArg), before.value, after.value);
+
+            boolean isSyntheticEndBlend = !isInfinite() && currentTick >= data.endTick && after.tick == data.stopTick;
+            return MathHelper.lerpAngle(
+                    getEaseFrom.ease.invoke(f, getEaseFrom.easingArg),
+                    before.value,
+                    after.value,
+                    !isSyntheticEndBlend
+            );
         }
     }
 }

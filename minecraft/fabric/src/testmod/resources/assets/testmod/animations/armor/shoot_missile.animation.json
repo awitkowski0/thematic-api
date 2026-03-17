@@ -1,0 +1,65 @@
+{
+    "format_version": "1.8.0",
+    "animations": {
+        "shoot_missile": {
+            "animation_length": 1,
+            "bones": {
+                "armorRightArm": {
+                    "rotation": [
+                        -79.74906,
+                        -13.70593,
+                        11.17236
+                    ],
+                    "position": [
+                        0,
+                        0,
+                        0
+                    ]
+                },
+                "armorHead": {
+                    "rotation": {
+                        "0.0": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "0.375": [
+                            12.61714,
+                            -7.15971,
+                            -1.59882
+                        ]
+                    }
+                }
+            }
+        },
+        "shoot_missile_fp": {
+            "animation_length": 1,
+            "bones": {
+                "armorRightArm": {
+                    "rotation": {
+                        "0.0": [
+                            -76.8911,
+                            40.33238,
+                            11.02465
+                        ],
+                        "0.375": [
+                            -79.74906,
+                            -13.70593,
+                            0
+                        ],
+                        "0.8125": [
+                            -79.74906,
+                            -13.70593,
+                            0
+                        ]
+                    },
+                    "position": [
+                        2,
+                        0,
+                        -4
+                    ]
+                }
+            }
+        }
+    }
+}

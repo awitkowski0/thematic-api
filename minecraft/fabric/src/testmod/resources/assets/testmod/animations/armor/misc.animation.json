@@ -1,0 +1,191 @@
+{
+    "format_version": "1.8.0",
+    "animations": {
+        "move.walk": {
+            "loop": true,
+            "animation_length": 1.04,
+            "bones": {
+                "armorRightLeg": {
+                    "rotation": {
+                        "0.0": {
+                            "vector": [0, 0, 0],
+                            "easing": "linear"
+                        },
+                        "0.26": {
+                            "vector": [50, 0, 0],
+                            "easing": "linear"
+                        },
+                        "0.52": {
+                            "vector": [0, 0, 0],
+                            "easing": "linear"
+                        },
+                        "0.78": {
+                            "vector": [-50, 0, 0],
+                            "easing": "linear"
+                        },
+                        "1.04": {
+                            "vector": [0, 0, 0],
+                            "easing": "linear"
+                        }
+                    }
+                },
+                "armorLeftLeg": {
+                    "rotation": {
+                        "0.0": {
+                            "vector": [0, 0, 0],
+                            "easing": "linear"
+                        },
+                        "0.26": {
+                            "vector": [-50, 0, 0],
+                            "easing": "linear"
+                        },
+                        "0.52": {
+                            "vector": [0, 0, 0],
+                            "easing": "linear"
+                        },
+                        "0.78": {
+                            "vector": [50, 0, 0],
+                            "easing": "linear"
+                        },
+                        "1.04": {
+                            "vector": [0, 0, 0],
+                            "easing": "linear"
+                        }
+                    }
+                },
+                "armorRightArm": {
+                    "rotation": {
+                        "0.0": {
+                            "vector": [0, 0, 0],
+                            "easing": "linear"
+                        },
+                        "0.26": {
+                            "vector": [-40, 0, 5],
+                            "easing": "linear"
+                        },
+                        "0.52": {
+                            "vector": [0, 0, 0],
+                            "easing": "linear"
+                        },
+                        "0.78": {
+                            "vector": [40, 0, 5],
+                            "easing": "linear"
+                        },
+                        "1.04": {
+                            "vector": [0, 0, 0],
+                            "easing": "linear"
+                        }
+                    }
+                },
+                "armorLeftArm": {
+                    "rotation": {
+                        "0.0": {
+                            "vector": [0, 0, 0],
+                            "easing": "linear"
+                        },
+                        "0.26": {
+                            "vector": [40, 0, -5],
+                            "easing": "linear"
+                        },
+                        "0.52": {
+                            "vector": [0, 0, 0],
+                            "easing": "linear"
+                        },
+                        "0.78": {
+                            "vector": [-40, 0, -5],
+                            "easing": "linear"
+                        },
+                        "1.04": {
+                            "vector": [0, 0, 0],
+                            "easing": "linear"
+                        }
+                    }
+                },
+                "armorBody": {
+                    "rotation": {
+                        "0.0": {
+                            "vector": [0, 0, 0],
+                            "easing": "linear"
+                        },
+                        "0.26": {
+                            "vector": [0, 0, 1],
+                            "easing": "linear"
+                        },
+                        "0.52": {
+                            "vector": [0, 0, 0],
+                            "easing": "linear"
+                        },
+                        "0.78": {
+                            "vector": [0, 0, 1],
+                            "easing": "linear"
+                        },
+                        "1.04": {
+                            "vector": [0, 0, 0],
+                            "easing": "linear"
+                        }
+                    }
+                },
+                "armorHead": {
+                    "rotation": {
+                        "0.0": {
+                            "vector": [0, 0, 0],
+                            "easing": "linear"
+                        },
+                        "0.26": {
+                            "vector": [0, 0, 1.5],
+                            "easing": "linear"
+                        },
+                        "0.52": {
+                            "vector": [0, 0, 0],
+                            "easing": "linear"
+                        },
+                        "0.78": {
+                            "vector": [0, 0, -1.5],
+                            "easing": "linear"
+                        },
+                        "1.04": {
+                            "vector": [0, 0, 0],
+                            "easing": "linear"
+                        }
+                    }
+                }
+            }
+        },
+        "mob.idle": {
+            "loop": true,
+            "animation_length": 3,
+            "bones": {
+                "armorBody": {
+                    "rotation": {
+                        "0.0": { "vector": [0, 0, 0], "easing": "linear" },
+                        "1.5": { "vector": [1, 0, 0], "easing": "linear" },
+                        "3.0": { "vector": [0, 0, 0], "easing": "linear" }
+                    },
+                    "position": {
+                        "0.0": { "vector": [0, 0, 0], "easing": "linear" },
+                        "1.5": { "vector": [0, 0.2, 0], "easing": "linear" },
+                        "3.0": { "vector": [0, 0, 0], "easing": "linear" }
+                    }
+                },
+                "armorLeftArm": {
+                    "rotation": {
+                        "0.0": { "vector": [0, 0, 0], "easing": "linear" },
+                        "1.5": { "vector": [2, 0, 0], "easing": "linear" },
+                        "3.0": { "vector": [0, 0, 0], "easing": "linear" }
+                    }
+                },
+                "armorRightArm": {
+                    "rotation": {
+                        "0.0": { "vector": [0, 0, 0], "easing": "linear" },
+                        "1.5": { "vector": [2, 0, 0], "easing": "linear" },
+                        "3.0": { "vector": [0, 0, 0], "easing": "linear" }
+                    }
+                }
+            }
+        },
+        "misc.idle": {
+            "animation_length": 1,
+            "bones": {}
+        }
+    }
+}

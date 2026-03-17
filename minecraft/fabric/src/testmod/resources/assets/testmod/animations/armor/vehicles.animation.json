@@ -1,0 +1,131 @@
+{
+    "format_version": "1.8.0",
+    "animations": {
+        "riding.bike": {
+            "loop": "hold_on_last_frame",
+            "animation_length": 0.125,
+            "bones": {
+                "body": {
+                    "rotation": [
+                        7.5,
+                        0,
+                        0
+                    ]
+                },
+                "armorRightLeg": {
+                    "rotation": [
+                        -64.91623,
+                        4.53051,
+                        2.11751
+                    ]
+                },
+                "armorRightBoot": {
+                    "rotation": [
+                        -67.42266,
+                        4.61854,
+                        1.91757
+                    ]
+                },
+                "armorLeftLeg": {
+                    "rotation": [
+                        -69.55418,
+                        -11.73507,
+                        -4.3361
+                    ]
+                },
+                "armorLeftBoot": {
+                    "rotation": [
+                        -69.11148,
+                        -16.41371,
+                        -6.15491
+                    ]
+                },
+                "armorLeftArm": {
+                    "rotation": [
+                        -95.019,
+                        -4.98093,
+                        0.43688
+                    ]
+                },
+                "armorRightArm": {
+                    "rotation": [
+                        -84.99294,
+                        2.4786,
+                        0.32652
+                    ]
+                },
+                "armorHead": {
+                    "rotation": [
+                        10,
+                        0,
+                        0
+                    ]
+                }
+            }
+        },
+        "ride_skateboard": {
+            "loop": true,
+            "bones": {
+                "body": {
+                    "rotation": [
+                        0,
+                        -90,
+                        0
+                    ]
+                },
+                "armorRightLeg": {
+                    "rotation": [
+                        0,
+                        0,
+                        7.5
+                    ]
+                },
+                "armorLeftLeg": {
+                    "rotation": [
+                        0,
+                        0,
+                        -5
+                    ]
+                },
+                "armorLeftArm": {
+                    "rotation": [
+                        -40.73074,
+                        -13.35981,
+                        -15.02126
+                    ],
+                    "position": [
+                        0,
+                        0,
+                        -2
+                    ]
+                },
+                "armorRightArm": {
+                    "rotation": [
+                        35,
+                        0,
+                        0
+                    ],
+                    "position": [
+                        0,
+                        0,
+                        2
+                    ]
+                },
+                "armorBody": {
+                    "rotation": [
+                        0,
+                        22.5,
+                        0
+                    ]
+                },
+                "armorHead": {
+                    "rotation": [
+                        0,
+                        52.5,
+                        0
+                    ]
+                }
+            }
+        }
+    }
+}

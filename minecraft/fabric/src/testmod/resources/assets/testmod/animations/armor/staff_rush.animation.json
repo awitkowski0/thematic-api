@@ -1,0 +1,122 @@
+{
+    "format_version": "1.8.0",
+    "animations": {
+        "spin": {
+            "loop": true,
+            "animation_length": 0.2917,
+            "bones": {
+                "gunBarrel": {
+                    "rotation": {
+                        "0.0": {
+                            "post": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "lerp_mode": "catmullrom"
+                        },
+                        "0.0417": {
+                            "post": [
+                                0,
+                                0,
+                                45
+                            ],
+                            "lerp_mode": "catmullrom"
+                        },
+                        "0.0833": {
+                            "post": [
+                                0,
+                                0,
+                                90
+                            ],
+                            "lerp_mode": "catmullrom"
+                        },
+                        "0.125": {
+                            "post": [
+                                0,
+                                0,
+                                135
+                            ],
+                            "lerp_mode": "catmullrom"
+                        },
+                        "0.1667": {
+                            "post": [
+                                0,
+                                0,
+                                180
+                            ],
+                            "lerp_mode": "catmullrom"
+                        },
+                        "0.2083": {
+                            "post": [
+                                0,
+                                0,
+                                225
+                            ],
+                            "lerp_mode": "catmullrom"
+                        },
+                        "0.25": {
+                            "post": [
+                                0,
+                                0,
+                                270
+                            ],
+                            "lerp_mode": "catmullrom"
+                        },
+                        "0.2917": {
+                            "post": [
+                                0,
+                                0,
+                                315
+                            ],
+                            "lerp_mode": "catmullrom"
+                        }
+                    }
+                }
+            }
+        },
+        "charge": {
+            "animation_length": 0.5,
+            "bones": {
+                "armorRightArm": {
+                    "rotation": {
+                        "0.0": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "0.2917": [
+                            -141.57316,
+                            -25.49671,
+                            28.48347
+                        ],
+                        "0.4167": [
+                            -73.20844,
+                            -37.37543,
+                            -2.50203
+                        ]
+                    }
+                },
+                "armorLeftArm": {
+                    "rotation": {
+                        "0.0": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "0.2917": [
+                            -135,
+                            45,
+                            -15
+                        ],
+                        "0.4167": [
+                            -67.71344,
+                            51.15988,
+                            -8.57941
+                        ]
+                    }
+                }
+            }
+        }
+    }
+}

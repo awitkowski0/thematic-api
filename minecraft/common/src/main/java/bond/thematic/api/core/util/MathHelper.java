@@ -41,10 +41,19 @@ public class MathHelper {
     }
 
     public static float lerpAngle(float delta, float start, float end) {
+        return lerpAngle(delta, start, end, true);
+    }
+
+    public static float lerpAngle(float delta, float start, float end, boolean preserveFullTurns) {
         float repeat = (float) (Math.PI * 2);
-        float d = (end - start) % repeat;
+        float rawDelta = end - start;
+        float d = rawDelta % repeat;
         if (d > Math.PI) d -= repeat;
         if (d < -Math.PI) d += repeat;
+
+        if (preserveFullTurns && Math.abs(d) < 0.0001f && Math.abs(rawDelta) > Math.PI) {
+            d = rawDelta;
+        }
         return start + d * delta;
     }
 

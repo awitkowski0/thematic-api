@@ -92,23 +92,16 @@ public class GeckoLibSerializer {
                 readBone(
                         emoteData.getOrCreatePart(boneName),
                         entry.getValue().getAsJsonObject(),
-                        emoteData,
-                        boneName
+                        emoteData
                 );
             } catch (Exception e) {
             }
         }
     }
 
-    private static void readBone(KeyframeAnimation.StateCollection stateCollection, JsonObject node, KeyframeAnimation.AnimationBuilder emoteData, String boneName) {
-        if (boneName.equals("armorBody")) {
-            // Split GeckoLib root bone: Position moves the player globally, Rotation rotates the torso
-            processTransformation(node, "rotation", emoteData.torso, emoteData, false);
-            processTransformation(node, "position", emoteData.body, emoteData, true);
-        } else {
-            processTransformation(node, "rotation", stateCollection, emoteData, false);
-            processTransformation(node, "position", stateCollection, emoteData, true);
-        }
+    private static void readBone(KeyframeAnimation.StateCollection stateCollection, JsonObject node, KeyframeAnimation.AnimationBuilder emoteData) {
+        processTransformation(node, "rotation", stateCollection, emoteData, false);
+        processTransformation(node, "position", stateCollection, emoteData, true);
     }
 
     private static void processTransformation(JsonObject node, String transformType,
@@ -120,10 +113,11 @@ public class GeckoLibSerializer {
         JsonElement jsonTransform = node.get(transformType);
         KeyframeAnimation.StateCollection.State[] targetStates = isPosition ?
                 getOffs(stateCollection) : getRots(stateCollection);
+        boolean[] wrappedRotationChannels = !isPosition ? detectWrappedRotationChannels(jsonTransform) : null;
 
         // If it's a simple array, treat as initial/default vector
         if (jsonTransform.isJsonArray()) {
-            readCollection(targetStates, 0, Ease.LINEAR, jsonTransform.getAsJsonArray(), emoteData, isPosition);
+            readCollection(targetStates, 0, Ease.LINEAR, jsonTransform.getAsJsonArray(), emoteData, isPosition, wrappedRotationChannels);
             return;
         }
 
@@ -134,7 +128,7 @@ public class GeckoLibSerializer {
             // Handle 'vector' key
             if (transformObj.has("vector")) {
                 readCollection(targetStates, 0, Ease.LINEAR,
-                               transformObj.get("vector").getAsJsonArray(), emoteData, isPosition);
+                               transformObj.get("vector").getAsJsonArray(), emoteData, isPosition, wrappedRotationChannels);
             }
 
             // Handle keyframe-specific entries
@@ -147,7 +141,7 @@ public class GeckoLibSerializer {
                     if (entry.getValue().isJsonArray()) {
                         // Simple vector at a specific tick
                         readCollection(targetStates, tick, Ease.LINEAR,
-                                       entry.getValue().getAsJsonArray(), emoteData, isPosition);
+                                       entry.getValue().getAsJsonArray(), emoteData, isPosition, wrappedRotationChannels);
                     } else if (entry.getValue().isJsonObject()) {
                         // Detailed keyframe data
                         readDataAtTick(
@@ -155,7 +149,8 @@ public class GeckoLibSerializer {
                                 stateCollection,
                                 tick,
                                 emoteData,
-                                isPosition
+                                isPosition,
+                                wrappedRotationChannels
                         );
                     }
                 } catch (NumberFormatException e) {
@@ -166,33 +161,40 @@ public class GeckoLibSerializer {
     }
 
     private static void readDataAtTick(JsonObject currentNode, KeyframeAnimation.StateCollection stateCollection,
-                                       int tick, KeyframeAnimation.AnimationBuilder emoteData, boolean isPos) {
-        Ease ease = determineEase(currentNode);
+                                       int tick, KeyframeAnimation.AnimationBuilder emoteData, boolean isPos,
+                                       boolean[] wrappedRotationChannels) {
+        Ease ease = determineEase(currentNode, isPos);
         KeyframeAnimation.StateCollection.State[] targetVec = isPos ? getOffs(stateCollection) : getRots(stateCollection);
 
         // Handle 'pre' vector
         if (currentNode.has("pre")) {
-            readCollection(targetVec, tick, ease, getVector(currentNode.get("pre")), emoteData, isPos);
+            readCollection(targetVec, tick, ease, getVector(currentNode.get("pre")), emoteData, isPos, wrappedRotationChannels);
         }
 
         // Handle 'vector'
         if (currentNode.has("vector")) {
-            readCollection(targetVec, tick, ease, currentNode.get("vector").getAsJsonArray(), emoteData, isPos);
+            readCollection(targetVec, tick, ease, currentNode.get("vector").getAsJsonArray(), emoteData, isPos, wrappedRotationChannels);
         }
 
         // Handle 'post' vector
         if (currentNode.has("post")) {
-            readCollection(targetVec, tick, ease, getVector(currentNode.get("post")), emoteData, isPos);
+            readCollection(targetVec, tick, ease, getVector(currentNode.get("post")), emoteData, isPos, wrappedRotationChannels);
         }
     }
 
-    private static Ease determineEase(JsonObject currentNode) {
+    private static Ease determineEase(JsonObject currentNode, boolean isPosition) {
         Ease ease = Ease.LINEAR;
 
         // Check lerp_mode first
         if (currentNode.has("lerp_mode")) {
             String lerp = safeParseString(currentNode.get("lerp_mode"), "linear");
             ease = lerp.equals("catmullrom") ? Ease.INOUTSINE : Easing.easeFromString(lerp);
+
+            // GeckoLib catmullrom on Euler rotations can overshoot between keyframes and
+            // produce visible torso jitter/snaps in some armorBody-heavy moves.
+            if (!isPosition && lerp.equals("catmullrom")) {
+                ease = Ease.LINEAR;
+            }
         }
 
         // Explicit easing can override lerp_mode
@@ -273,7 +275,7 @@ public class GeckoLibSerializer {
         else return ((JsonObject)element).get("vector").getAsJsonArray();
     }
 
-    private static void readCollection(KeyframeAnimation.StateCollection.State[] a, int tick, Ease ease, JsonArray array, KeyframeAnimation.AnimationBuilder emoteData, boolean isPos){
+    private static void readCollection(KeyframeAnimation.StateCollection.State[] a, int tick, Ease ease, JsonArray array, KeyframeAnimation.AnimationBuilder emoteData, boolean isPos, boolean[] wrappedRotationChannels){
         if(a.length != 3)throw new ArrayStoreException("wrong array length");
         for(int i = 0; i < 3; i++){
             float value = array.get(i).getAsFloat();
@@ -290,13 +292,68 @@ public class GeckoLibSerializer {
                     value = -value;
                 }
             } else {
-                // Rotation: GeckoLib pitch/yaw generally need inversion to match MC ModelPart axes
-                if (i != 2) {
+                // Only root body rotations are inverted to match world-space transform axes.
+                // Torso/head inversion is applied consistently per wrapped channel.
+                boolean isBody = a[0] == emoteData.body.pitch;
+                boolean isTorsoOrHead = a[0] == emoteData.torso.pitch || a[0] == emoteData.head.pitch;
+                boolean shouldInvertWrappedChannel = isTorsoOrHead && wrappedRotationChannels != null && wrappedRotationChannels[i];
+                boolean shouldInvertRot = isBody || shouldInvertWrappedChannel;
+                if (shouldInvertRot && i != 2) {
                     value = -value;
                 }
             }
             value += a[i].defaultValue;
             a[i].addKeyFrame(tick, value, ease, 0, true);
+        }
+    }
+
+    private static boolean[] detectWrappedRotationChannels(JsonElement transformElement) {
+        boolean[] wrapped = new boolean[] {false, false, false};
+        collectWrappedRotationChannels(transformElement, wrapped);
+        return wrapped;
+    }
+
+    private static void collectWrappedRotationChannels(JsonElement element, boolean[] wrapped) {
+        if (element == null) return;
+
+        if (element.isJsonArray()) {
+            markWrappedFromArray(element.getAsJsonArray(), wrapped);
+            return;
+        }
+
+        if (!element.isJsonObject()) return;
+
+        JsonObject obj = element.getAsJsonObject();
+        if (obj.has("vector")) {
+            markWrappedFromArray(obj.get("vector").getAsJsonArray(), wrapped);
+        }
+        if (obj.has("pre")) {
+            markWrappedFromArray(getVector(obj.get("pre")), wrapped);
+        }
+        if (obj.has("post")) {
+            markWrappedFromArray(getVector(obj.get("post")), wrapped);
+        }
+
+        for (Map.Entry<String, JsonElement> entry : obj.entrySet()) {
+            if (entry.getKey().equals("vector") || entry.getKey().equals("pre") || entry.getKey().equals("post") ||
+                    entry.getKey().equals("easing") || entry.getKey().equals("lerp_mode")) {
+                continue;
+            }
+            collectWrappedRotationChannels(entry.getValue(), wrapped);
+        }
+    }
+
+    private static void markWrappedFromArray(JsonArray array, boolean[] wrapped) {
+        if (array == null) return;
+        int limit = Math.min(3, array.size());
+        for (int i = 0; i < limit; i++) {
+            try {
+                float value = array.get(i).getAsFloat();
+                if (Math.abs(value) > 180f) {
+                    wrapped[i] = true;
+                }
+            } catch (Exception ignored) {
+            }
         }
     }
 

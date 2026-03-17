@@ -1,5 +1,6 @@
 package bond.thematic.api.fabric.client;
 
+import bond.thematic.api.minecraftApi.AnimationTestCommands;
 import bond.thematic.api.minecraftApi.PlayerAnimationRegistry;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
@@ -18,6 +19,7 @@ public class FabricClientInitializer implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
+        AnimationTestCommands.registerDevOnly(null);
         ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new SimpleSynchronousResourceReloadListener() {
             @Override
             public Identifier getFabricId() {

@@ -1,0 +1,64 @@
+{
+    "format_version": "1.8.0",
+    "animations": {
+        "hammer_spin_begin": {
+            "animation_length": 0.125,
+            "bones": {
+                "armorRightArm": {
+                    "rotation": {
+                        "0.0": {
+                            "post": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "lerp_mode": "catmullrom"
+                        },
+                        "0.0833": {
+                            "post": [
+                                -80,
+                                5,
+                                0
+                            ],
+                            "lerp_mode": "catmullrom"
+                        },
+                        "0.125": {
+                            "post": [
+                                -90,
+                                77.5,
+                                -1.7906
+                            ],
+                            "lerp_mode": "catmullrom"
+                        }
+                    },
+                    "position": {
+                        "0.0": {
+                            "post": [
+                                0,
+                                0,
+                                0
+                            ],
+                            "lerp_mode": "catmullrom"
+                        },
+                        "0.0833": {
+                            "post": [
+                                0,
+                                0,
+                                -2
+                            ],
+                            "lerp_mode": "catmullrom"
+                        },
+                        "0.125": {
+                            "post": [
+                                -2,
+                                -1,
+                                -2
+                            ],
+                            "lerp_mode": "catmullrom"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

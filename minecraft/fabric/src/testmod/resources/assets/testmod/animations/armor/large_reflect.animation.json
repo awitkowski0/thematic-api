@@ -1,0 +1,176 @@
+{
+    "format_version": "1.8.0",
+    "animations": {
+        "large_reflect": {
+            "animation_length": 1,
+            "bones": {
+                "armorRightLeg": {
+                    "rotation": {
+                        "0.0": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "0.25": [
+                            0,
+                            0,
+                            5
+                        ]
+                    },
+                    "position": [
+                        "linear",
+                        "linear",
+                        "linear"
+                    ]
+                },
+                "armorLeftLeg": {
+                    "rotation": {
+                        "0.0": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "0.25": [
+                            17.5,
+                            0,
+                            0
+                        ]
+                    },
+                    "position": [
+                        "linear",
+                        "linear",
+                        "linear"
+                    ]
+                },
+                "armorRightBoot": {
+                    "rotation": {
+                        "0.0": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "0.25": [
+                            0,
+                            0,
+                            5
+                        ]
+                    },
+                    "position": [
+                        "linear",
+                        "linear",
+                        "linear"
+                    ]
+                },
+                "armorLeftBoot": {
+                    "rotation": {
+                        "0.0": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "0.25": [
+                            17.5,
+                            0,
+                            0
+                        ]
+                    },
+                    "position": [
+                        "linear",
+                        "linear",
+                        "linear"
+                    ]
+                },
+                "armorLeftArm": {
+                    "rotation": {
+                        "0.0": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "0.25": [
+                            -72.5,
+                            47.5,
+                            90
+                        ]
+                    },
+                    "position": {
+                        "0.0": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "0.25": [
+                            2,
+                            0,
+                            0
+                        ]
+                    }
+                },
+                "armorRightArm": {
+                    "rotation": {
+                        "0.0": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "0.25": [
+                            -72.5,
+                            -47.5,
+                            -90
+                        ]
+                    },
+                    "position": {
+                        "0.0": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "0.25": [
+                            -2,
+                            0,
+                            0
+                        ]
+                    }
+                },
+                "armorBody": {
+                    "rotation": [
+                        "linear",
+                        "linear",
+                        "linear"
+                    ],
+                    "position": [
+                        "linear",
+                        "linear",
+                        "linear"
+                    ]
+                },
+                "armorHead": {
+                    "rotation": {
+                        "0.0": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "0.25": [
+                            12.5,
+                            0,
+                            0
+                        ]
+                    },
+                    "position": {
+                        "0.0": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "0.25": [
+                            0,
+                            0,
+                            0
+                        ]
+                    }
+                }
+            }
+        }
+    }
+}

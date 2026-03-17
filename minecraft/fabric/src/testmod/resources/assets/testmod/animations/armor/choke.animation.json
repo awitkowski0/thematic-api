@@ -1,0 +1,78 @@
+{
+    "format_version": "1.8.0",
+    "animations": {
+        "choke": {
+            "animation_length": 6.125,
+            "bones": {
+                "armorRightLeg": {
+                    "rotation": {
+                        "0.0417": {
+                            "pre": [
+                                -7.5,
+                                0,
+                                0
+                            ],
+                            "post": [
+                                -7.5,
+                                0,
+                                0
+                            ],
+                            "lerp_mode": "catmullrom"
+                        }
+                    }
+                },
+                "armorLeftLeg": {
+                    "rotation": {
+                        "0.0417": {
+                            "pre": [
+                                7.5,
+                                0,
+                                0
+                            ],
+                            "post": [
+                                7.5,
+                                0,
+                                0
+                            ],
+                            "lerp_mode": "catmullrom"
+                        }
+                    }
+                },
+                "armorLeftArm": {
+                    "rotation": {
+                        "0.0417": {
+                            "pre": [
+                                27.14233,
+                                -4.59902,
+                                8.88927
+                            ],
+                            "post": [
+                                27.14233,
+                                -4.59902,
+                                8.88927
+                            ],
+                            "lerp_mode": "catmullrom"
+                        }
+                    }
+                },
+                "armorRightArm": {
+                    "rotation": {
+                        "0.0417": {
+                            "pre": [
+                                -105.51385,
+                                -24.89837,
+                                2.3273
+                            ],
+                            "post": [
+                                -105.51385,
+                                -24.89837,
+                                2.3273
+                            ],
+                            "lerp_mode": "catmullrom"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
