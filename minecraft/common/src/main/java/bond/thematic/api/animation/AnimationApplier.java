@@ -32,6 +32,19 @@ public class AnimationApplier extends AnimationProcessor {
         if (partName.equals("armorRightLeg") && !this.isPartAnimated("armorRightLeg")) {
             effectivePartName = "rightLeg";
         }
+        // Arm/head/body fallbacks (same pattern)
+        if (partName.equals("leftArm") && !this.isPartAnimated("leftArm")) {
+            effectivePartName = "armorLeftArm";
+        }
+        if (partName.equals("rightArm") && !this.isPartAnimated("rightArm")) {
+            effectivePartName = "armorRightArm";
+        }
+        if (partName.equals("head") && !this.isPartAnimated("head")) {
+            effectivePartName = "armorHead";
+        }
+        if (partName.equals("torso") && !this.isPartAnimated("torso")) {
+            effectivePartName = "armorBody";
+        }
 
         Vec3f standingPivot = getStandingPivot(effectivePartName);
         Vec3f pos = this.get3DTransform(effectivePartName, TransformType.POSITION, standingPivot);
@@ -52,6 +65,12 @@ public class AnimationApplier extends AnimationProcessor {
             }
         }
         Vec3f rot = this.get3DTransform(partName, TransformType.ROTATION, Vec3f.ZERO);
+
+        // Convert GeckoLib coordinate space to Minecraft ModelPart coordinate space
+        // GeckoLibSerializer negates X/Y for body/torso/head; do the same for arms/legs
+        if (effectivePartName.contains("Arm") || effectivePartName.contains("Leg")) {
+            rot = new Vec3f(-rot.getX(), -rot.getY(), rot.getZ());
+        }
 
         if (this.getKeyframeType() == IAnimation.KeyframeType.STATIC) {
             part.pitch = MathHelper.clampToRadian(rot.getX());
