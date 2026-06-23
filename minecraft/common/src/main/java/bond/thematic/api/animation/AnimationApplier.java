@@ -64,13 +64,7 @@ public class AnimationApplier extends AnimationProcessor {
                 part.pivotZ += 4.0f;
             }
         }
-        Vec3f rot = this.get3DTransform(partName, TransformType.ROTATION, Vec3f.ZERO);
-
-        // Convert GeckoLib coordinate space to Minecraft ModelPart coordinate space
-        // GeckoLibSerializer negates X/Y for body/torso/head; do the same for arms/legs
-        if (effectivePartName.contains("Arm") || effectivePartName.contains("Leg")) {
-            rot = new Vec3f(-rot.getX(), -rot.getY(), rot.getZ());
-        }
+        Vec3f rot = this.get3DTransform(effectivePartName, TransformType.ROTATION, Vec3f.ZERO);
 
         if (this.getKeyframeType() == IAnimation.KeyframeType.STATIC) {
             part.pitch = MathHelper.clampToRadian(rot.getX());
