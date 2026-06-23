@@ -54,8 +54,11 @@ public class AnimationApplier extends AnimationProcessor {
         }
         Vec3f rot = this.get3DTransform(effectivePartName, TransformType.ROTATION, Vec3f.ZERO);
 
-        // GeckoLib stores rotation in world-space; ModelPart expects local-space. Negate X/Y for all parts.
-        rot = new Vec3f(-rot.getX(), -rot.getY(), rot.getZ());
+        // GeckoLibSerializer negates X/Y for body/torso/head; ModelPart uses original convention
+        if (effectivePartName.equals("armorBody") || effectivePartName.equals("torso") || effectivePartName.equals("body") ||
+            effectivePartName.equals("armorHead") || effectivePartName.equals("head")) {
+            rot = new Vec3f(-rot.getX(), -rot.getY(), rot.getZ());
+        }
 
         if (this.getKeyframeType() == IAnimation.KeyframeType.STATIC) {
             part.pitch = MathHelper.clampToRadian(rot.getX());
