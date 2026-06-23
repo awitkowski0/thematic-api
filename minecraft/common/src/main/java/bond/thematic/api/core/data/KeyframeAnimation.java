@@ -642,10 +642,14 @@ public final class KeyframeAnimation implements IPlayable {
              * @return is the keyframe valid
              */
             public boolean addKeyFrame(int tick, float value, Ease ease, int rotate, boolean degrees, Float easingArg) {
+                return addKeyFrame(tick, value, ease, rotate, degrees, easingArg, null);
+            }
+
+            public boolean addKeyFrame(int tick, float value, Ease ease, int rotate, boolean degrees, Float easingArg, HashMap<String, Object> extraData) {
                 if (degrees && this.isAngle) value *= 0.01745329251f;
-                boolean bl = this.addKeyFrame(new KeyFrame(tick, value, ease, easingArg));
+                boolean bl = this.addKeyFrame(new KeyFrame(tick, value, ease, easingArg, extraData));
                 if (isAngle && rotate != 0) {
-                    bl = this.addKeyFrame(new KeyFrame(tick, (float) (value + Math.PI * 2d * rotate), ease, easingArg)) && bl;
+                    bl = this.addKeyFrame(new KeyFrame(tick, (float) (value + Math.PI * 2d * rotate), ease, easingArg, extraData)) && bl;
                 }
                 return bl;
             }
@@ -727,12 +731,18 @@ public final class KeyframeAnimation implements IPlayable {
         public final float value;
         public final Ease ease;
         public final Float easingArg;
+        public final HashMap<String, Object> extraData;
 
         public KeyFrame(int tick, float value, Ease ease, Float easingArg) {
+            this(tick, value, ease, easingArg, new HashMap<>());
+        }
+
+        public KeyFrame(int tick, float value, Ease ease, Float easingArg, HashMap<String, Object> extraData) {
             this.tick = tick;
             this.value = value;
             this.ease = ease;
             this.easingArg = easingArg;
+            this.extraData = extraData != null ? extraData : new HashMap<>();
         }
 
         public KeyFrame(int tick, float value, Ease ease) {

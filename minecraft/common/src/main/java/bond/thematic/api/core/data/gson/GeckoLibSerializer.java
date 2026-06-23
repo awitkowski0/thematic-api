@@ -117,7 +117,7 @@ public class GeckoLibSerializer {
 
         // If it's a simple array, treat as initial/default vector
         if (jsonTransform.isJsonArray()) {
-            readCollection(targetStates, 0, Ease.LINEAR, jsonTransform.getAsJsonArray(), emoteData, isPosition, wrappedRotationChannels);
+            readCollection(targetStates, 0, Ease.LINEAR, jsonTransform.getAsJsonArray(), emoteData, isPosition, wrappedRotationChannels, null);
             return;
         }
 
@@ -128,7 +128,7 @@ public class GeckoLibSerializer {
             // Handle 'vector' key
             if (transformObj.has("vector")) {
                 readCollection(targetStates, 0, Ease.LINEAR,
-                               transformObj.get("vector").getAsJsonArray(), emoteData, isPosition, wrappedRotationChannels);
+                               transformObj.get("vector").getAsJsonArray(), emoteData, isPosition, wrappedRotationChannels, null);
             }
 
             // Handle keyframe-specific entries
@@ -141,7 +141,7 @@ public class GeckoLibSerializer {
                     if (entry.getValue().isJsonArray()) {
                         // Simple vector at a specific tick
                         readCollection(targetStates, tick, Ease.LINEAR,
-                                       entry.getValue().getAsJsonArray(), emoteData, isPosition, wrappedRotationChannels);
+                                       entry.getValue().getAsJsonArray(), emoteData, isPosition, wrappedRotationChannels, null);
                     } else if (entry.getValue().isJsonObject()) {
                         // Detailed keyframe data
                         readDataAtTick(
@@ -166,19 +166,34 @@ public class GeckoLibSerializer {
         Ease ease = determineEase(currentNode, isPos);
         KeyframeAnimation.StateCollection.State[] targetVec = isPos ? getOffs(stateCollection) : getRots(stateCollection);
 
+        // Extract per-keyframe thematic variables
+        HashMap<String, Object> extraData = null;
+        if (currentNode.has("thematic")) {
+            extraData = new java.util.HashMap<>();
+            JsonObject them = currentNode.getAsJsonObject("thematic");
+            for (Map.Entry<String, JsonElement> e : them.entrySet()) {
+                if (e.getValue().isJsonPrimitive()) {
+                    JsonPrimitive p = e.getValue().getAsJsonPrimitive();
+                    if (p.isNumber()) extraData.put(e.getKey(), p.getAsDouble());
+                    else if (p.isBoolean()) extraData.put(e.getKey(), p.getAsBoolean());
+                    else extraData.put(e.getKey(), p.getAsString());
+                }
+            }
+        }
+
         // Handle 'pre' vector
         if (currentNode.has("pre")) {
-            readCollection(targetVec, tick, ease, getVector(currentNode.get("pre")), emoteData, isPos, wrappedRotationChannels);
+            readCollection(targetVec, tick, ease, getVector(currentNode.get("pre")), emoteData, isPos, wrappedRotationChannels, extraData);
         }
 
         // Handle 'vector'
         if (currentNode.has("vector")) {
-            readCollection(targetVec, tick, ease, currentNode.get("vector").getAsJsonArray(), emoteData, isPos, wrappedRotationChannels);
+            readCollection(targetVec, tick, ease, currentNode.get("vector").getAsJsonArray(), emoteData, isPos, wrappedRotationChannels, extraData);
         }
 
         // Handle 'post' vector
         if (currentNode.has("post")) {
-            readCollection(targetVec, tick, ease, getVector(currentNode.get("post")), emoteData, isPos, wrappedRotationChannels);
+            readCollection(targetVec, tick, ease, getVector(currentNode.get("post")), emoteData, isPos, wrappedRotationChannels, extraData);
         }
     }
 
@@ -275,7 +290,7 @@ public class GeckoLibSerializer {
         else return ((JsonObject)element).get("vector").getAsJsonArray();
     }
 
-    private static void readCollection(KeyframeAnimation.StateCollection.State[] a, int tick, Ease ease, JsonArray array, KeyframeAnimation.AnimationBuilder emoteData, boolean isPos, boolean[] wrappedRotationChannels){
+    private static void readCollection(KeyframeAnimation.StateCollection.State[] a, int tick, Ease ease, JsonArray array, KeyframeAnimation.AnimationBuilder emoteData, boolean isPos, boolean[] wrappedRotationChannels, HashMap<String, Object> extraData){
         if(a.length != 3)throw new ArrayStoreException("wrong array length");
         for(int i = 0; i < 3; i++){
             float value = array.get(i).getAsFloat();
@@ -303,7 +318,7 @@ public class GeckoLibSerializer {
                 }
             }
             value += a[i].defaultValue;
-            a[i].addKeyFrame(tick, value, ease, 0, true);
+            a[i].addKeyFrame(tick, value, ease, 0, true, null, extraData);
         }
     }
 
