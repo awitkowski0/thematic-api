@@ -20,17 +20,18 @@ public class AnimationApplier extends AnimationProcessor {
     public void updatePart(String partName, ModelPart part, AbstractClientPlayerEntity clientPlayerEntity) {
         String effectivePartName = partName;
 
-        if (partName.equals("armorLeftBoot") && !this.isPartAnimated("armorLeftBoot")) {
-            effectivePartName = "leftLeg";
+        // Arm/head/body fallbacks
+        if (partName.equals("leftArm") && !this.isPartAnimated("leftArm")) {
+            effectivePartName = "armorLeftArm";
         }
-        if (partName.equals("armorRightBoot") && !this.isPartAnimated("armorRightBoot")) {
-            effectivePartName = "rightLeg";
+        if (partName.equals("rightArm") && !this.isPartAnimated("rightArm")) {
+            effectivePartName = "armorRightArm";
         }
-        if (partName.equals("armorLeftLeg") && !this.isPartAnimated("armorLeftLeg")) {
-            effectivePartName = "leftLeg";
+        if (partName.equals("head") && !this.isPartAnimated("head")) {
+            effectivePartName = "armorHead";
         }
-        if (partName.equals("armorRightLeg") && !this.isPartAnimated("armorRightLeg")) {
-            effectivePartName = "rightLeg";
+        if (partName.equals("torso") && !this.isPartAnimated("torso")) {
+            effectivePartName = "armorBody";
         }
 
         Vec3f standingPivot = getStandingPivot(effectivePartName);
@@ -51,7 +52,13 @@ public class AnimationApplier extends AnimationProcessor {
                 part.pivotZ += 4.0f;
             }
         }
-        Vec3f rot = this.get3DTransform(partName, TransformType.ROTATION, Vec3f.ZERO);
+        Vec3f rot = this.get3DTransform(effectivePartName, TransformType.ROTATION, Vec3f.ZERO);
+
+        // GeckoLibSerializer negates X/Y for body/torso/head; ModelPart uses original convention
+        if (effectivePartName.equals("armorBody") || effectivePartName.equals("torso") || effectivePartName.equals("body") ||
+            effectivePartName.equals("armorHead") || effectivePartName.equals("head")) {
+            rot = new Vec3f(-rot.getX(), -rot.getY(), rot.getZ());
+        }
 
         if (this.getKeyframeType() == IAnimation.KeyframeType.STATIC) {
             part.pitch = MathHelper.clampToRadian(rot.getX());
