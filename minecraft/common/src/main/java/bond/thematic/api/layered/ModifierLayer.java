@@ -143,6 +143,14 @@ public class ModifierLayer<T extends IAnimation> implements IAnimation {
     }
 
     @Override
+    public KeyframeType getKeyframeType() {
+        if (!modifiers.isEmpty()) {
+            return modifiers.get(0).getKeyframeType();
+        } else if (animation != null) return animation.getKeyframeType();
+        return KeyframeType.ADDITIVE;
+    }
+
+    @Override
     public boolean isPartAnimated(String partName) {
         if (!modifiers.isEmpty()) {
             return modifiers.get(0).isPartAnimated(partName);

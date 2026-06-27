@@ -181,6 +181,31 @@ public class AnimationStack implements IAnimation {
     }
 
     @Override
+    public KeyframeType getKeyframeType() {
+        // Return the keyframe type of the highest-priority active layer,
+        // since AnimationApplier.updatePart() uses this to determine STATIC vs ADDITIVE mode.
+        // Default to ADDITIVE if no active layer has its own type.
+        try {
+            if (layers == null || layers.isEmpty()) {
+                return KeyframeType.ADDITIVE;
+            }
+            // Iterate in reverse (highest priority last = most important)
+            for (int i = layers.size() - 1; i >= 0; i--) {
+                Pair<Integer, IAnimation> layer = layers.get(i);
+                if (layer != null && layer.getRight() != null && layer.getRight().isActive()) {
+                    KeyframeType type = layer.getRight().getKeyframeType();
+                    if (type != KeyframeType.ADDITIVE) {
+                        return type;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Animation stack error in getKeyframeType: " + e.getMessage());
+        }
+        return KeyframeType.ADDITIVE;
+    }
+
+    @Override
     public boolean isPartAnimated(String partName) {
         if (this.layers == null || this.layers.isEmpty()) {
             return false;
