@@ -7,6 +7,8 @@ import bond.thematic.api.core.data.KeyframeAnimation;
 import bond.thematic.api.core.util.Ease;
 import bond.thematic.api.core.util.Easing;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -14,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 public class GeckoLibSerializer {
+    private static final Logger LOGGER = LoggerFactory.getLogger(GeckoLibSerializer.class);
 
     public static List<KeyframeAnimation> serialize(JsonObject node) {
         try {
@@ -26,9 +29,9 @@ public class GeckoLibSerializer {
     private static List<KeyframeAnimation> readAnimations(JsonObject jsonEmotes) {
         List<KeyframeAnimation> emotes = new ArrayList<>();
         for (Map.Entry<String, JsonElement> entry : jsonEmotes.entrySet()) {
+            String name = entry.getKey();
             try {
                 KeyframeAnimation.AnimationBuilder builder = new KeyframeAnimation.AnimationBuilder(AnimationFormat.JSON_MC_ANIM);
-                String name = entry.getKey();
                 JsonObject node = entry.getValue().getAsJsonObject();
                 builder.name = name;
 
@@ -40,6 +43,7 @@ public class GeckoLibSerializer {
 
                 emotes.add(builder.build());
             } catch (Exception e) {
+                LOGGER.warn("Failed to parse animation '{}': {}", name, e.getMessage());
             }
         }
         return emotes;
@@ -95,6 +99,7 @@ public class GeckoLibSerializer {
                         emoteData
                 );
             } catch (Exception e) {
+                LOGGER.warn("Failed to parse bone '{}': {}", snake2Camel(entry.getKey()), e.getMessage());
             }
         }
     }

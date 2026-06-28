@@ -220,4 +220,25 @@ public class AnimationStack implements IAnimation {
         }
         return false;
     }
+
+    @Override
+    public KeyframeType getKeyframeType(String partName) {
+        try {
+            if (layers == null || layers.isEmpty()) {
+                return KeyframeType.ADDITIVE;
+            }
+            for (int i = layers.size() - 1; i >= 0; i--) {
+                Pair<Integer, IAnimation> layer = layers.get(i);
+                if (layer != null && layer.getRight() != null && layer.getRight().isActive()) {
+                    KeyframeType type = layer.getRight().getKeyframeType(partName);
+                    if (type != KeyframeType.ADDITIVE) {
+                        return type;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Animation stack error in getKeyframeType(String): " + e.getMessage());
+        }
+        return KeyframeType.ADDITIVE;
+    }
 }

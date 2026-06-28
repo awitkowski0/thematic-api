@@ -32,6 +32,17 @@ public interface IAnimation {
     }
 
     /**
+     * Get the keyframe type for a specific part name.
+     * Override this to use different modes for different body parts.
+     * 
+     * @param partName The part name
+     * @return keyframe type for this part
+     */
+    default KeyframeType getKeyframeType(String partName) {
+        return getKeyframeType();
+    }
+
+    /**
      * Get the playback mode of the animation
      * 
      * @return playback mode

@@ -48,4 +48,8 @@ public class AnimationProcessor {
     public IAnimation.KeyframeType getKeyframeType() {
         return animation.getKeyframeType();
     }
+
+    public IAnimation.KeyframeType getKeyframeType(String partName) {
+        return animation.getKeyframeType(partName);
+    }
 }

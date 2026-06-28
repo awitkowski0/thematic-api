@@ -60,7 +60,7 @@ public class AnimationApplier extends AnimationProcessor {
             rot = new Vec3f(-rot.getX(), -rot.getY(), rot.getZ());
         }
 
-        if (this.getKeyframeType() == IAnimation.KeyframeType.STATIC) {
+        if (this.getKeyframeType(effectivePartName) == IAnimation.KeyframeType.STATIC) {
             part.pitch = MathHelper.clampToRadian(rot.getX());
             part.yaw = MathHelper.clampToRadian(rot.getY());
             part.roll = MathHelper.clampToRadian(rot.getZ());
